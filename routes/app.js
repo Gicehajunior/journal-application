@@ -38,7 +38,9 @@ router.route('/users/edit')
     .post(authMiddleware, upload.none(), UsersController.editUser); 
 
 // journals routes
-router.get('/journal/list', authMiddleware, JournalController.index);
+router.route('/journal/list')
+    .get(authMiddleware, JournalController.index)
+    .post(authMiddleware, JournalController.index);
 router.route('/journal/create')
     .get(authMiddleware, JournalController.createJournal) 
     .post(authMiddleware, upload.array('attachments', 100), JournalController.createJournal);

@@ -15,6 +15,64 @@ class JournalController {
     }
 
     static async index(req, res) {
+        if (req.query.type && req.query.type == 'dt') {
+            try {
+                let journals = await Journal.query().findAll(); 
+                journals = journals.map(journal => {
+                    let row = journal.dataValues; // Extract Sequelize dataValues
+        
+                    return {
+                        ...row,
+                        action: `
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button class="dropdown-item journal-resource edit-user-btn" data-modal=".edit-users-modal" data-id="${row.id}">
+                                            ✏️ Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger journal-resource delete-user-btn" data-id="${row.id}">
+                                            🗑️ Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        `,
+                        description_closed: (() => {
+                            const maxLength = 80; // Adjust the max length as needed
+                            return row.description.length > maxLength 
+                                ? row.description.substring(0, maxLength) + "..." 
+                                : row.description;
+                        })(),
+                        title: utils.ucwords(row.title),
+                        created_at: (() => {
+                            if (!row.created_at) return '';
+                            
+                            let d = new Date(row.created_at);
+                            
+                            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+                        })(),
+                        updated_at: (() => {
+                            if (!row.updated_at) return '';
+                            
+                            let d = new Date(row.updated_at);
+
+                            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+                        })(),
+                    };
+                }); 
+
+                return res.status(200).json({data: journals});
+            } catch (error) {
+                console.error(error);
+                return res.status(200).json({data: []});
+            }
+        }
+        
         const status = req.session.status ?? null;
         const message = req.session.message ?? null;
         return res.render("crm/journal/index", { 

@@ -27,8 +27,23 @@ class UsersController {
                 return {
                     ...data,
                     action: `
-                        <button class="btn btn-sm btn-primary users-resource edit-user-btn" data-modal='.edit-users-modal' data-id="${data.id}">Edit</button>
-                        <button class="btn btn-sm btn-danger users-resource delete-user-btn" data-id="${data.id}">Delete</button>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <button class="dropdown-item users-resource edit-user-btn" data-modal=".edit-users-modal" data-id="${data.id}">
+                                        ✏️ Edit
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item text-danger users-resource delete-user-btn" data-id="${data.id}">
+                                        🗑️ Delete
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     `,
                     fullname: utils.ucwords(data.fullname),
                     created_at: (() => {

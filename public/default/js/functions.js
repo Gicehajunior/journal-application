@@ -216,8 +216,7 @@ function onParseActionModal(event, action, method='GET', callbackFuncs = undefin
 
 function dateRangeInitializer(selectedDatesParams = undefined) {
     try {
-        const dateRangeInputFields = document.querySelectorAll('.dateRange')
-        var jsDateFormat = convertPhpDateFormatToJs(phpDateFormat, false);
+        const dateRangeInputFields = document.querySelectorAll('.dateRange') 
         dateRangeInputFields.forEach(dateRangeInputField => {
             $(dateRangeInputField).datepicker({
                 format: jsDateFormat,
@@ -257,42 +256,6 @@ function dateRangeInitializer(selectedDatesParams = undefined) {
         // catch error
         console.log("NET Error.")
     }
-}
-
-function convertPhpDateFormatToJs(phpDateFormat, parseTimeFormat = true) {
-    // Create a mapping of PHP format characters to JavaScript format characters
-    const formatMapping = {
-        'Y': 'yyyy', // Full numeric representation of a year, 4 digits
-        'y': 'yy',   // Two-digit representation of a year
-        'm': 'mm',   // Numeric representation of a month, with leading zeros
-        'n': 'm',    // Numeric representation of a month, without leading zeros
-        'd': 'dd',   // Day of the month, 2 digits with leading zeros
-        'j': 'd',    // Day of the month without leading zeros
-        'H': 'HH',   // 24-hour format of an hour with leading zeros
-        'h': 'hh',   // 12-hour format of an hour with leading zeros
-        'i': 'mm',   // Minutes with leading zeros
-        's': 'ss',   // Seconds with leading zeros
-        'A': 'A',    // Uppercase Ante meridiem and Post meridiem
-        'a': 'a',    // Lowercase ante meridiem and post meridiem
-        'O': 'ZZ',   // Difference to Greenwich time (GMT) in hours
-        'e': 'Z',    // Timezone identifier
-        'F': 'MMMM', // Full textual representation of a month
-        'M': 'MMM',  // A short textual representation of a month
-        'D': 'ddd',  // A textual representation of a day, three letters
-        'l': 'dddd'  // A full textual representation of the day of the week
-    };
-
-    phpDateFormat = phpDateFormat ? phpDateFormat : "d-m-Y";
-    
-    // Create a regex for the PHP date format keys, ensuring we match only exact keys
-    const regex = new RegExp(Object.keys(formatMapping).join('|'), 'g');
-
-    if (!parseTimeFormat) {
-        phpDateFormat = phpDateFormat.replace(/H|h|I|i|S|s|:/g, '').trim();
-    }
-
-    // Replace the PHP format with JavaScript format using the mapping
-    return phpDateFormat.replace(regex, (matched) => formatMapping[matched]);  
 }
 
 function parseDateRange(dateRangeStr) {
@@ -337,12 +300,8 @@ function searchSelectInitializer() {
                                 var $option = $('<option>', {
                                     value: `${option[item_id_notation]}`,
                                     text: text_option
-                                });
-
-                                if (UserLedgerViewId && UserLedgerViewId == option[item_id_notation]) {
-                                    $option.attr('selected', 'selected');
-                                }
-
+                                }); 
+                                
                                 currentSelect.append($option);
 
                             });

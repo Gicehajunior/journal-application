@@ -1,21 +1,115 @@
-
 <div class="sidebar">
-    <h2>MyExpress</h2> 
-    <ul class="nav flex-column">
+    <div class="brand-logo">
+        <img
+            style="width: 130px; height: 130px;"
+            src="/store/logo/impulse-journal-logo.png"
+            class="img-fluid rounded-circle"
+            alt="Impulse Journal"
+        /> 
+    </div>
+    <ul class="nav flex-column pt-5 navbar-container">
         <li class="nav-item">
-            <a class="nav-link" href="/dashboard">Dashboard</a>
+            <a class="nav-link" href="/dashboard"><span class="fw-bold fs-5">🏠 Dashboard</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#docs">Documentation</a>
+            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#usersMenu">
+                <span class="fw-bold fs-5">👥 Users</span>  
+                <span class="caret ms-auto">▼</span>
+            </a>
+            <div class="collapse" id="usersMenu">
+                <ul class="nav flex-column ms-3"> 
+                    <li><a class="nav-link" href="#">➕  Add User</a></li> 
+                    <li><a class="nav-link" href="/users">📋 All Users</a></li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#profile">Profile</a>
+            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#contactsMenu">
+                <span class="fw-bold fs-5">📞 Contacts</span>  
+                <span class="caret ms-auto">▼</span>
+            </a>
+            <div class="collapse" id="contactsMenu">
+                <ul class="nav flex-column ms-3">
+                    <li><a class="nav-link" href="#">➕ New Contact</a></li>
+                    <li><a class="nav-link" href="#">📜 All Contacts</a></li>
+                    <li><a class="nav-link" href="#">📤 Import Contacts</a></li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#settings">Settings</a>
+            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#journalMenu">
+                <span class="fw-bold fs-5">📚 Journal</span>  
+                <span class="caret ms-auto">▼</span>
+            </a>
+            <div class="collapse" id="journalMenu">
+                <ul class="nav flex-column ms-3">
+                    <li><a class="nav-link" href="/journal/create">✏️ New Entry</a></li>
+                    <li><a class="nav-link" href="/journal/list">📖 All Entries</a></li>
+                    <li><a class="nav-link" href="/journal/categories">🏷️ Categories</a></li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
+            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#communicationMenu">
+                <span class="fw-bold fs-5">💬 Messages</span>
+                <span class="caret ms-auto">▼</span>
+            </a>
+            <div class="collapse" id="communicationMenu">
+                <ul class="nav flex-column ms-3"> 
+                    <li><a class="nav-link" href="#">📧 Mailing</a></li>
+                    <li><a class="nav-link" href="#">📱 Bulk SMS</a></li>
+                    <li><a class="nav-link" href="#">💬 Whatsapp SMS</a></li>
+                </ul>
+            </div>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#trackingMenu">
+                <span class="fw-bold fs-5">📈 Tracking</span>  
+                <span class="caret ms-auto">▼</span>
+            </a>
+            <div class="collapse" id="trackingMenu">
+                <ul class="nav flex-column ms-3">
+                    <li><a class="nav-link" href="#">📊 Mood Tracker</a></li>
+                    <li><a class="nav-link" href="#">🎯 Goals</a></li>
+                    <li><a class="nav-link" href="#">📅 Calendar</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#galleryMenu">
+                <span class="fw-bold fs-5">🖼️ Gallery</span>  
+                <span class="caret ms-auto">▼</span>
+            </a>
+            <div class="collapse" id="galleryMenu">
+                <ul class="nav flex-column ms-3">
+                    <li><a class="nav-link" href="#">📸 All Photos</a></li>
+                    <li><a class="nav-link" href="#">📂 Album Categories</a></li>
+                    <li><a class="nav-link" href="#">➕ Add New Picture</a></li>
+                    <li><a class="nav-link" href="#">📤 Import Pictures</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"><span class="fw-bold fs-5">🔍 Search</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"><span class="fw-bold fs-5">⭐ Favorites</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#settingsMenu">
+                <span class="fw-bold fs-5">⚙️ Settings</span>  
+                <span class="caret ms-auto">▼</span>
+            </a>
+            <div class="collapse" id="settingsMenu">
+                <ul class="nav flex-column ms-3">
+                    <li><a class="nav-link" href="#">🎨 Appearance</a></li>
+                    <li><a class="nav-link" href="#">🔒 Privacy</a></li>
+                    <li><a class="nav-link" href="#">💾 Backup</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout"><span class="fw-bold fs-5">🚪 Logout</span></a>
         </li>
     </ul>
-</div>
+</div> 

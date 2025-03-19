@@ -1,12 +1,11 @@
 const auth = (router) => {
     const multer = require('multer');
-    const AuthController = require('@app/controllers/auth/AuthController');
-    const WebController = require('@app/controllers/other/WebController');
+    const AuthController = require('@app/controllers/auth/AuthController'); 
 
     const upload = multer();
 
     // login routes
-    router.get('/', WebController.index);
+    router.get('/', AuthController.login);
     router.get('/login', AuthController.login);
     router.post('/login', upload.none(), AuthController.authlogin); 
 

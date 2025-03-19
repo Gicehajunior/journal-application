@@ -1,0 +1,19 @@
+
+<div class="topbar bg-light">
+    <div class="section-1">
+        <div class="search-bar">
+            <%- include('crm/partials/topSearchbar') %>
+        </div>
+        
+        <div class="m-0 mt-5 row">
+            <div class="form-group col-md-8">
+                <h2>Welcome, <%= user.username %></h2>
+                <p>Your quick access panel for managing your account.</p>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="filterdate">Filter Stats By:</label>
+                <input type="text" class="form-control dateRange filterdate" name="filterdate" id="filterdate">
+            </div>
+        </div>
+    </div>
+</div>

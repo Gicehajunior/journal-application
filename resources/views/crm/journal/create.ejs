@@ -1,0 +1,74 @@
+<%- include('crm/partials/header') %>
+
+<div class="dashboard-container">
+    <%- include('crm/partials/sidebar') %>
+
+    <div class="main-content">
+        <%- include('crm/partials/generalTopbar') %>
+        <hr>
+
+        <% if (message) { %>
+            <div class="alert alert-<%= status && status == 'success' ? 'success' : 'danger' %> alert-dismissible fade show" role="alert">
+                <strong>Alert:</strong> <%= message %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+
+        <div class="container mt-4"> 
+            <form id="journalForm" action="/journal/create" method="POST" enctype="multipart/form-data" class="needs-validation journal-form" novalidate>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Journal Title</label>
+                    <input type="text" id="title" name="title" class="form-control title" required> 
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" id="date" name="date" class="form-control date" required> 
+                    </div>
+
+                    <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <label for="category" class="form-label">Category</label>
+                        <select id="category" name="category" class="form-select category">
+                            <option value="Personal">Personal</option>
+                            <option value="Work">Work</option>
+                            <option value="Ideas">Ideas</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" name="description" rows="12" class="form-control description" required></textarea> 
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Attachments (optional)</label>
+                    <div id="uploadDiv" class="upload-div upload-div upload-section-area">
+                        <i class="bi bi-upload fs-1"></i>
+                        <p class="mt-2">Drag & Drop files here or <span class="browse">browse</span></p>
+                        <p class="files-list text-center m-4"></p>
+                        <input type="file" id="attachments" name="attachments" class="form-control attachments" multiple="multiple" hidden="hidden">
+                    </div>
+                </div>   
+                
+                <div class="mb-3">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label d-flex align-items-center justify-content-center gap-3">
+                            <input class="form-check-input stay-here p-4 mr-5" type="checkbox" name="stayHere" id="stayHere" value="1"> Stay On this Page after Submitting?
+                        </label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary w-100 save-journal-btn" id="saveJournalBtn">Save Journal</button>
+            </form>
+        </div>
+    </div> 
+</div> 
+
+<!-- Scripts -->
+<script src="/default/js/src/auth.js?v1"></script>
+<script src="/default/js/src/journal.js?v1"></script>
+
+<%- include('crm/partials/footer') %>

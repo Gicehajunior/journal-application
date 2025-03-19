@@ -4,8 +4,8 @@
     <%- include('partials/sidebar') %>
 
     <div class="main-content">
-        <%- include('partials/topbar') %>
-
+        <%- include('partials/normalTopbar') %>
+        <hr>
         <% if (message) { %>
             <div class="form-group">
                 <div class="alert alert-<%= status && status == 'success' ? 'primary' : 'danger' %>" role="alert">
@@ -14,21 +14,202 @@
             </div>
         <% } %>
 
-        <div class="stats">
-            <div class="stat-box">
-                <h3>Users</h3>
-                <p>120</p>
+        <div class="section-2">
+            <div class="stats">
+                <div class="stat-box">
+                    <h3>👥 Users</h3>
+                    <p>120</p>
+                </div>
+                <div class="stat-box">
+                    <h3>🖼️ Gallery Photos</h3>
+                    <p>120</p>
+                </div>
+                <div class="stat-box">
+                    <h3>📇 Contacts</h3>
+                    <p>350</p>
+                </div>
+                <div class="stat-box">
+                    <h3>💬 Messages</h3>
+                    <p>45</p>
+                </div>
+                <div class="stat-box">
+                    <h3>📚 Entries</h3>
+                    <p>120</p>
+                </div>
+                <div class="stat-box">
+                    <h3>📅 Scheduled</h3>
+                    <p>350</p>
+                </div>
+                <div class="stat-box">
+                    <h3>💾 Backups</h3>
+                    <p>45</p>
+                </div> 
+                <div class="stat-box">
+                    <h3>🎯 Goals & Milestones</h3>
+                    <p>350</p>
+                </div> 
+            </div>        
+
+            <div class="journal-entries mt-5">
+                <h3 class="font-weight-bold">Journal Entries List</h3>
+                <hr>
+                <div class="table-responsive mt-4">
+                    <table class="table table-primary">
+                        <thead>
+                            <tr>
+                                <th scope="col">Column 1</th>
+                                <th scope="col">Column 2</th>
+                                <th scope="col">Column 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="">
+                                <td scope="row">R1C1</td>
+                                <td>R1C2</td>
+                                <td>R1C3</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
             </div>
-            <div class="stat-box">
-                <h3>Posts</h3>
-                <p>350</p>
+
+            <div class="goals-list mt-5">
+                <h3 class="font-weight-bold">Goals List Set</h3>
+                <hr>
+                <div class="table-responsive mt-4">
+                    <table class="table table-primary">
+                        <thead>
+                            <tr>
+                                <th scope="col">Column 1</th>
+                                <th scope="col">Column 2</th>
+                                <th scope="col">Column 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="">
+                                <td scope="row">R1C1</td>
+                                <td>R1C2</td>
+                                <td>R1C3</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
             </div>
-            <div class="stat-box">
-                <h3>Messages</h3>
-                <p>45</p>
+
+            <div class="trackings mt-5">
+                <h3 class="font-weight-bold">Mood Tracking Stats</h3>
+                <hr>
+                <div class="table-responsive mt-4">
+                    <table class="table table-primary">
+                        <thead>
+                            <tr>
+                                <th scope="col">Column 1</th>
+                                <th scope="col">Column 2</th>
+                                <th scope="col">Column 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="">
+                                <td scope="row">R1C1</td>
+                                <td>R1C2</td>
+                                <td>R1C3</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                            <tr class="">
+                                <td scope="row">Item</td>
+                                <td>Item</td>
+                                <td>Item</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
             </div>
         </div>
-    </div>
+    </div> 
 </div>
 
 <%- include('partials/footer') %>

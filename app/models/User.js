@@ -12,6 +12,7 @@ class User extends Model {
         const sequelize = db.getSequelize();
         return sequelize.define("User", {
             id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+            fullname: { type: DataTypes.STRING, allowNull: true, unique: false },
             username: { type: DataTypes.STRING, allowNull: true, unique: false },
             email: { type: DataTypes.STRING, allowNull: true, unique: false },
             contact: { type: DataTypes.STRING, allowNull: true, unique: false },

@@ -1,0 +1,48 @@
+<!-- Modal -->
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modal-title">Edit <%= user ? user.fullname : '' %> Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="edit-user-form" action="/users/edit" method="POST">
+                <div class="mb-3">
+                    <label for="fullname" class="form-label">Full Name</label>
+                    <input type="text" value="<%= user ? user.fullname : '' %>" name="fullname" id="fullname" class="form-control fullname" placeholder="Enter your fullname" required>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" value="<%= user ? user.username : '' %>" name="username" id="username" class="form-control username" placeholder="Enter your username" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" value="<%= user ? user.email : '' %>" name="email" id="email" class="form-control email" autocapitalize="off" autocomplete="off" placeholder="Enter email address" required>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="contact" class="form-label">Contact Phone</label>
+                    <input type="text" value="<%= user ? user.contact : '' %>" name="contact" id="contact" class="form-control contact" autocomplete="off" placeholder="Enter contact phone" required>
+                </div>
+        
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" value="" name="password" id="password" class="form-control password" placeholder="Enter password" autocapitalize="off" autocomplete="off">
+                    </div>
+            
+                    <div class="mb-3 col-md-6">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" value="" name="confirmPassword" id="confirmPassword" class="form-control confirmPassword" placeholder="Confirm password" autocapitalize="off" autocomplete="off">
+                    </div>
+                </div> 
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-sm edit-user-auth-btn" id="edit-user-auth-btn"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        </div>
+    </div>
+</div>

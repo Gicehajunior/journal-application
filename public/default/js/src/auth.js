@@ -18,9 +18,7 @@ class Auth {
                     return;
                 }
                 
-                const data = new FormData(registerForm);
-
-                console.log(data);
+                const data = new FormData(registerForm); 
 
                 $.ajax({
                     type: registerForm.getAttribute('method'),
@@ -68,9 +66,7 @@ class Auth {
                     return;
                 }
                 
-                const data = new FormData(loginForm);
-
-                console.log(data);
+                const data = new FormData(loginForm); 
 
                 $.ajax({
                     type: loginForm.getAttribute('method'),

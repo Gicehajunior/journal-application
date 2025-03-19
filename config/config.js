@@ -17,6 +17,7 @@ module.exports = {
         ROUTES: process.env.ROUTES_PATH || path.join(__dirname, '../routes'),
         VIEWS: process.env.VIEWS_PATH || path.join(__dirname, '../resources'),
         PUBLIC: process.env.PUBLIC_PATH || path.join(__dirname, '../public'),
+        STORAGE: path.join(__dirname, '../public/store'),
     },
     DATABASE: {
         DB_CONNECTION: process.env.DB_CONNECTION || 'mysql',
@@ -44,7 +45,7 @@ module.exports = {
     },
     SESSION: {
         SESSION_NAME: "myexpress.auth_session", // leave empty to default to connect.sid
-        RESAVE: false,
+        RESAVE: true,
         PROXY: true
     },
     COOKIES: { 

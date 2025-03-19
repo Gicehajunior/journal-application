@@ -2,7 +2,7 @@ const { DataTypes, Model } = require('sequelize');
 const db = require('@config/database');
 
 class Journal extends Model {
-    static tableName = 'users';
+    static tableName = 'journal';
 
     constructor() {
         super()
@@ -11,10 +11,13 @@ class Journal extends Model {
     static query() {
         const sequelize = db.getSequelize();
         return sequelize.define("Journal", {
-            id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
+            id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+            user_id: { type: DataTypes.INTEGER, allowNull: false },
             title: { type: DataTypes.STRING, allowNull: false },
-            content: { type: DataTypes.TEXT, allowNull: false },
-            category: { type: DataTypes.STRING, allowNull: false },
+            description: { type: DataTypes.TEXT, allowNull: false },
+            category: { type: DataTypes.STRING, allowNull: true },
+            attachments: { type: DataTypes.TEXT, allowNull: true },
+            status: { type: DataTypes.TEXT, allowNull: false },
             date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
         }, {  
             sequelize: sequelize,  

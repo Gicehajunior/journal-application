@@ -63,9 +63,36 @@ class Journal {
             $(table).DataTable({
                 destroy: true,
                 processing: true,
-                pageLength: 10,   
+                pageLength: 10, 
+                borders: true,
+                ajax: {
+                    type: 'GET',
+                    url: '/journal/list?type=dt',
+                    dataSrc: (res) => { 
+                        return res.data || [];
+                    },
+                    else: (error) => {
+                        error = JSON.parse(error.responseText) || error;
+                        console.log(`Ajax Error: ${error.message || JSON.parse(error.responseText) || JSON.stringify(error)}`);
+                        toast('error', 8000, error.message || 'An error occurred. Please try again!');
+                    }
+                },
+                columns: [
+                    {data: 'action'},
+                    {data: 'title'},
+                    {data: 'category'},
+                    {data: 'description_closed'}, 
+                    {data: 'created_at'}, 
+                ],
+                fnDrawCallback: () => {
+                    (new Journal()).actionOnJournalsResource();
+                }  
             });
         }
+    }
+
+    actionOnJournalsResource() {
+        // 
     }
 }
 

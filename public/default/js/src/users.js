@@ -9,7 +9,8 @@ class User {
             $(table).DataTable({
                 destroy: true,
                 processing: true,
-                pageLength: 10,  
+                pageLength: 10, 
+                borders: true, 
                 ajax: {
                     type: 'GET',
                     url: '/list',

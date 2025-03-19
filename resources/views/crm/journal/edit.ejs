@@ -1,0 +1,85 @@
+<%- include('crm/partials/header') %>
+
+<div class="dashboard-container">
+    <%- include('crm/partials/sidebar') %>
+
+    <div class="main-content">
+        <%- include('crm/partials/generalTopbar') %>
+        <hr>
+
+        <% if (message) { %>
+            <div class="alert alert-<%= status && status == 'success' ? 'success' : 'danger' %> alert-dismissible fade show" role="alert">
+                <strong>Alert:</strong> <%= message %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+
+        <div class="container mt-4"> 
+            <form id="journalForm" action="/journal/edit" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Journal Title</label>
+                    <input type="text" id="title" name="title" class="form-control title" required>
+                    <div class="invalid-feedback">Title is required.</div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" id="date" name="date" class="form-control date" required>
+                        <div class="invalid-feedback">Please select a date.</div>
+                    </div>
+
+                    <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <label for="category" class="form-label">Category</label>
+                        <select id="category" name="category" class="form-select category">
+                            <option value="Personal">Personal</option>
+                            <option value="Work">Work</option>
+                            <option value="Ideas">Ideas</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" name="description" rows="12" class="form-control description" required></textarea>
+                    <div class="invalid-feedback">Description is required.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Attachments (optional)</label>
+                    <div id="uploadDiv" class="upload-div upload-div upload-section-area">
+                        <i class="bi bi-upload fs-1"></i>
+                        <p class="mt-2">Drag & Drop files here or <span class="browse">browse</span></p>
+                        <input type="file" id="attachments" name="attachments" class="form-control attachments d-none" multiple>
+                    </div>
+                </div>                
+
+                <button type="button" class="btn btn-primary w-100 save-journal" id="save-journal">Save Journal</button>
+            </form>
+        </div>
+    </div> 
+</div>
+
+<!-- Bootstrap 5 Form Validation -->
+<script>
+    (function () {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+
+<!-- Scripts -->
+<script src="/default/js/src/auth.js?v1"></script>
+<script src="/default/js/src/journal.js?v1"></script>
+
+<%- include('crm/partials/footer') %>

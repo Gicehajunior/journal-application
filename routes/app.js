@@ -13,19 +13,37 @@
  * GitHub: https://github.com/Gicehajunior
  */
 const express = require('express');
+
+const {upload} = require('@config/storage');
 const authRoutes = require('@routes/auth'); 
+const UsersController = require('@app/controllers/other/UsersController');
 const DashboardController = require('@app/controllers/other/DashboardController');
 const JournalController = require('@app/controllers/other/JournalController');
 const authMiddleware = require('@app/mwares/authMiddleware');
 
-const router = express.Router();
+const router = express.Router();   
 
 // Auth Routes
 authRoutes(router);
 
 // Add New Routes here...
+// dashboard routes
 router.get('/dashboard', authMiddleware, DashboardController.index);
-router.get('/journals/list', authMiddleware, JournalController.getJournals);
-router.post('/journals/create', authMiddleware, JournalController.createJournal);
+
+// users routes
+router.get('/users', authMiddleware, UsersController.index); 
+router.get('/list', authMiddleware, UsersController.getUsers); 
+router.route('/users/edit')
+    .get(authMiddleware, UsersController.editUser)
+    .post(authMiddleware, upload.none(), UsersController.editUser); 
+
+// journals routes
+router.get('/journal/list', authMiddleware, JournalController.index);
+router.route('/journal/create')
+    .get(authMiddleware, JournalController.createJournal) 
+    .post(authMiddleware, upload.array('attachments', 100), JournalController.createJournal);
+router.route('/journal/edit')
+    .get(authMiddleware, JournalController.editJournal)
+    .post(authMiddleware, upload.array('attachments', 100), JournalController.editJournal);
 
 module.exports = router;

@@ -14,3 +14,6 @@ body {
 .btn-custom:hover {
     background: #0056b3;
 }
+* button, * input, * textarea, * select {
+    border-radius: 0px !important;
+}

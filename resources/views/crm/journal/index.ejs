@@ -1,0 +1,56 @@
+<%- include('crm/partials/header') %>
+
+<div class="dashboard-container">
+    <%- include('crm/partials/sidebar') %>
+
+    <div class="main-content">
+        <%- include('crm/partials/generalTopbar') %>
+        <hr>
+
+        <% if (message) { %>
+            <div class="form-group">
+                <div class="alert alert-<%= status && status == 'success' ? 'primary' : 'danger' %>" role="alert">
+                    <strong>Alert:</strong> <%= message %>
+                </div>
+            </div>
+        <% } %>
+        
+        <div class="section-2">
+            <div class="row mb-3">
+                <!-- Button trigger modal -->
+                <div class="d-flex justify-content-end">
+                    <a type="button" class="btn btn-primary" href="/journal/create">
+                        Add journal
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-primary table-bordered journals-table mt-4" id="journalsTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Action</th>
+                            <th scope="col">Unique Code</th>
+                            <th scope="col">Journal Name</th>
+                            <th scope="col w-50">Journal Context</th> 
+                            <th scope="col">Added On</th> 
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <!-- data gets listed here -->
+                    </tbody>
+                </table>
+            </div>
+                   
+        </div>
+    </div> 
+</div>
+
+<!-- modal -->
+<!-- /modal -->
+
+<!-- scripts -->
+<script src="/default/js/src/auth.js?v1"></script>
+<script src="/default/js/src/journal.js?v1"></script>
+<!-- /scripts -->
+
+<%- include('crm/partials/footer') %>

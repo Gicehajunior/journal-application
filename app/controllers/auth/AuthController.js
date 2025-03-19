@@ -10,6 +10,7 @@ class AuthController {
 
     static async authregister(req, res) {
         try {
+            const fullname = req.body.fullname ?? null;
             const username = req.body.username ?? null;
             const email = req.body.email ?? null;
             const contact = req.body.contact ?? null;
@@ -17,7 +18,7 @@ class AuthController {
             const confirmPassword = req.body.confirmPassword ?? null;
     
             // Check if all fields are present
-            if (!username || !email || !contact || !password || !confirmPassword) {
+            if (!fullname || !username || !email || !contact || !password || !confirmPassword) {
                 throw new Error(`All fields are required!`);
             }
 
@@ -32,8 +33,9 @@ class AuthController {
             }
             
             // Hash password and create user
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const user = await User.query().create({ username: username, email: email, contact: contact, password: hashedPassword });
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const user = await User.query().create({ fullname: fullname, username: username, email: email, contact: contact, password: hashedPassword });
             res.status(200).json({ status: 'success', message: 'User registered successfully', redirectUrl: '/login', user });
         } catch (error) {
             console.error('Error:', error);
@@ -64,7 +66,7 @@ class AuthController {
                 throw new Error('Invalid credentials');
             }
             
-            req.session.user = { id: user.id, username: user.username, email: user.email, contact: user.contact };
+            req.session.user = { id: user.id, fullname: user.fullname, username: user.username, email: user.email, contact: user.contact };
             const token = jwt.sign(req.session.user, config.APP.JWT_SECRET, { expiresIn: '1h' });
             req.session.token = token;
 

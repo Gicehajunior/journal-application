@@ -73,8 +73,12 @@ function goBack() {
  * @param {string} content - The HTML content to append.
  * @param {HTMLElement} element - The element to which the content will be appended.
  */
-function __append_html(content, element) {
-    element.innerHTML = content;
+function __append_html(content, element, append=false) {
+    if (append) {
+        element.innerHTML += content; // Append new content
+    } else {
+        element.innerHTML = content; // Replace content
+    }
 }
 
 function __show_modal(modal) {
@@ -164,7 +168,7 @@ function route(path, params = null) {
     }
 }
 
-function onParseActionModal(event, action, method='GET', callbackFuncs = undefined, modalAttributeSelector='target-modal') {
+function onParseActionModal(event, action, method='GET', callbackFuncs = undefined, modalAttributeSelector='target-modal', modalSelector=undefined) {
     $.ajax({
         type: `${method}`,
         url: `${action}`,
@@ -172,14 +176,13 @@ function onParseActionModal(event, action, method='GET', callbackFuncs = undefin
         success: function (res, status, xhr) {
             event.target.disabled = false;
             if (res.status && res.status == 'error') {
-                toast(res.status, 500, res.message || 'An error occurred!');
+                toast(res.status, 5000, res.message || 'An error occurred!');
                 return;
             }
 
             let contentType = xhr.getResponseHeader("Content-Type"); 
             if (contentType && contentType.includes("text/html")) { 
-                let target_modal_selector = event.target.getAttribute(modalAttributeSelector);
-                console.log(target_modal_selector);
+                let target_modal_selector = (modalSelector !== undefined) ? modalSelector : event.target.getAttribute(modalAttributeSelector);
                 if (target_modal_selector) { 
                     const modal_target = document.querySelector(target_modal_selector);
                     __append_html(res, modal_target);
@@ -301,7 +304,7 @@ function searchSelectInitializer() {
                                     value: `${option[item_id_notation]}`,
                                     text: text_option
                                 }); 
-                                
+
                                 currentSelect.append($option);
 
                             });
@@ -377,7 +380,7 @@ function setupUploadDivSection() {
     function displaySelectedFiles(input) {
         const fileList = input.files;
         const fileNames = Array.from(fileList).map(file => file.name).join(", ");
-        __append_html(`<p><strong>Selected:</strong> ${fileNames}</p>`, fileslist);
+        __append_html(`<p><strong>Selected:</strong> ${fileNames}</p>`, fileslist, true);
     }
 }
 

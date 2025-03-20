@@ -7,8 +7,8 @@
         <%- include('crm/partials/generalTopbar') %>
         <hr>
 
-        <% if (message) { %>
-            <div class="form-group">
+        <% if (message && message.length > 0) { %>
+            <div class="form-group m-4">
                 <div class="alert alert-<%= status && status == 'success' ? 'primary' : 'danger' %>" role="alert">
                     <strong>Alert:</strong> <%= message %>
                 </div>
@@ -16,22 +16,20 @@
         <% } %>
         
         <div class="section-2">
-            <div class="row mb-3">
-                <!-- Button trigger modal -->
-                <div class="d-flex justify-content-end">
-                    <a type="button" class="btn btn-primary" href="/journal/create">
-                        Add journal
-                    </a>
+            <div class="row mb-3"> 
+                <div class="d-flex justify-content-end"> 
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                        Add New Category
+                    </button> 
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-primary table-bordered border border-2 border-dark journals-table mt-4" id="journalsTable">
+                <table class="table table-primary table-bordered border border-2 border-dark journal-categories-table mt-4" id="journalCategoriesTable">
                     <thead>
                         <tr>
                             <th scope="col">Action</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Category</th>
-                            <th scope="col w-50">Description</th> 
+                            <th scope="col">Category Name</th> 
+                            <th scope="col w-50">Category Description</th> 
                             <th scope="col">Added On</th> 
                         </tr>
                     </thead>
@@ -46,7 +44,10 @@
 </div>
 
 <!-- modal -->
-<div class="modal fade preview-journal-modal" id="previewJournalModal" tabindex="-1" aria-labelledby="previewJournalModalLabel" aria-hidden="true"></div>
+<div class="modal fade add-category-modal" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <%- include('partials/add-category') %>
+</div>
+<div class="modal fade edit-category-modal" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true"></div>
 <!-- /modal -->
 
 <!-- scripts -->

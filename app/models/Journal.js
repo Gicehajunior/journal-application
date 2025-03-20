@@ -15,7 +15,7 @@ class Journal extends Model {
             user_id: { type: DataTypes.INTEGER, allowNull: false },
             title: { type: DataTypes.STRING, allowNull: false },
             description: { type: DataTypes.TEXT, allowNull: false },
-            category: { type: DataTypes.STRING, allowNull: true },
+            category_id: { type: DataTypes.INTEGER, allowNull: true },
             attachments: { type: DataTypes.TEXT, allowNull: true },
             status: { type: DataTypes.TEXT, allowNull: false },
             date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },

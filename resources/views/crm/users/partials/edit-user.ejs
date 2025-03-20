@@ -26,6 +26,16 @@
                     <label for="contact" class="form-label">Contact Phone</label>
                     <input type="text" value="<%= user ? user.contact : '' %>" name="contact" id="contact" class="form-control contact" autocomplete="off" placeholder="Enter contact phone" required>
                 </div>
+                
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="rolename">Role Name</label>
+                        <select class="form-control" name="rolename" id="rolename">
+                            <option <%= user.role == 'superadmin' ? 'selected' : '' %> value="user">User</option>
+                            <option <%= user.role == 'superadmin' ? 'selected' : '' %> value="superadmin">Super Admin</option> 
+                        </select>
+                    </div>
+                </div> 
         
                 <div class="row">
                     <div class="mb-3 col-md-6">

@@ -88,6 +88,7 @@ class UsersController {
                 data['contact'] = req.body.contact ?? null;
                 data['password'] = req.body.password ?? null;
                 data['confirmPassword'] = req.body.confirmPassword ?? null;    
+                data['role'] = req.body.rolename ?? null;    
             }
             
             if (!id) {

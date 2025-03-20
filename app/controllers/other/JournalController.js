@@ -17,7 +17,11 @@ class JournalController {
     static async index(req, res) {
         if (req.query.type && req.query.type == 'dt') {
             try {
-                let journals = await Journal.query().findAll(); 
+                let journals = await Journal.query().findAll({
+                    where: {
+                        user_id: req.session.user.id
+                    }
+                }); 
                 journals = journals.map(journal => {
                     let row = journal.dataValues; // Extract Sequelize dataValues
         

@@ -20,7 +20,7 @@ class UserUtil extends Util {
     }
 
     async editUserFunc(data) {
-        let { id, fullname, username, email, contact, password, confirmPassword } = data;
+        let { id, fullname, username, email, contact, password, confirmPassword, role } = data;
 
         if (!id || !fullname || !username || !email || !contact) {
             throw new Error("ID, Username, Email, and Contact are required!");
@@ -44,8 +44,8 @@ class UserUtil extends Util {
             password = userDetails.password;
         }
 
-        // Update user details 
-        await User.query().update({ fullname, username, email, contact, password }, {
+        // Update user details  
+        await User.query().update({ fullname, username, email, contact, password, role }, {
             where: {
                 id: id,
             },

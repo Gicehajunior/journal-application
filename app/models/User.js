@@ -17,6 +17,7 @@ class User extends Model {
             email: { type: DataTypes.STRING, allowNull: true, unique: false },
             contact: { type: DataTypes.STRING, allowNull: true, unique: false },
             password: { type: DataTypes.STRING, allowNull: true },
+            role: { type: DataTypes.STRING, allowNull: true },
         }, { 
             sequelize: sequelize,  
             timestamps: true,

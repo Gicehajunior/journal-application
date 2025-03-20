@@ -20,7 +20,11 @@ class UsersController {
 
     static async getUsers(req, res) {   
         try { 
-            let users = await User.query().findAll(); 
+            if (req.session.user.role == 'user') {
+                return res.status(200).json({data: []});
+            }
+
+            let users = await User.query().findAll();
             users = users.map(user => {
                 let data = user.dataValues; // Extract Sequelize dataValues
     
@@ -88,6 +92,7 @@ class UsersController {
                 data['contact'] = req.body.contact ?? null;
                 data['password'] = req.body.password ?? null;
                 data['confirmPassword'] = req.body.confirmPassword ?? null;    
+                data['role'] = req.body.rolename ?? null;    
             }
             
             if (!id) {

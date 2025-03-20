@@ -11,18 +11,20 @@
         <li class="nav-item">
             <a class="nav-link" href="/dashboard"><span class="fw-bold fs-5">🏠 Dashboard</span></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#usersMenu">
-                <span class="fw-bold fs-5">👥 Users</span>  
-                <span class="caret ms-auto">▼</span>
-            </a>
-            <div class="collapse" id="usersMenu">
-                <ul class="nav flex-column ms-3"> 
-                    <li><a class="nav-link" href="#">➕  Add User</a></li> 
-                    <li><a class="nav-link" href="/users">📋 All Users</a></li>
-                </ul>
-            </div>
-        </li>
+        <% if (user.role && user.role == 'superadmin') { %>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#usersMenu">
+                    <span class="fw-bold fs-5">👥 Users</span>  
+                    <span class="caret ms-auto">▼</span>
+                </a>
+                <div class="collapse" id="usersMenu">
+                    <ul class="nav flex-column ms-3"> 
+                        <li><a class="nav-link" href="#">➕  Add User</a></li> 
+                        <li><a class="nav-link" href="/users">📋 All Users</a></li>
+                    </ul>
+                </div>
+            </li>
+        <% } %>
         <li class="nav-item">
             <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#contactsMenu">
                 <span class="fw-bold fs-5">📞 Contacts</span>  

@@ -34,13 +34,18 @@ class JournalController {
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <button class="dropdown-item journal-resource edit-user-btn" data-id="${row.id}">
+                                        <button class="dropdown-item journal-resource edit-journal-btn" data-id="${row.id}">
                                             ✏️ Edit
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item text-danger journal-resource delete-user-btn" data-id="${row.id}">
+                                        <button class="dropdown-item text-danger journal-resource delete-journal-btn" data-id="${row.id}">
                                             🗑️ Delete
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item journal-resource preview-journal-btn" data-modal=".preview-journal-modal" data-id="${row.id}">
+                                            👁️ Preview
                                         </button>
                                     </li>
                                 </ul>
@@ -277,6 +282,38 @@ class JournalController {
             badge: 'Journal | Edit Journal', 
             user: req.session.user ,
             journal: journal
+        });
+    }
+
+    static async journalPreview(req, res) {
+        try { 
+            let id; 
+            if (req.method == 'GET') {
+                id = req.query.id;
+            }
+
+            if (!id) {
+                throw new Error('Your request has been denied. Authentication error occurred!');
+            }
+            
+            let journal = await JournalUtil.getJournalDetailsById(id);
+            journal.title = utils.ucwords(journal.title); 
+            journal.description = utils.nl2br(journal.description); 
+            journal.journal_date = utils.dateToISO8601Formatter(journal.date);
+            journal.attachments = JSON.parse(journal.attachments); 
+            
+            return res.render('crm/journal/partials/journal-preview', {title: "Edit User", journal: journal}); 
+        } catch(error) {
+            console.error(error);
+            return res.status(200).json({status: "error", message: error.message || "An error occured!"});
+        }
+    }
+
+    static async journalCategories(req, res) {
+        return res.render("crm/journal/categories", { 
+            title: "Journal Page",  
+            badge: 'Journal | Manage Journal Categories', 
+            user: req.session.user 
         });
     }
 }

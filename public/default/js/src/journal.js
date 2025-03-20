@@ -60,7 +60,7 @@ class Journal {
     getJournals() {
         const table = document.querySelector('.journals-table');
         if (documentContains(table)) {
-            $(table).DataTable({
+            const dataTable = $(table).DataTable({
                 destroy: true,
                 processing: true,
                 pageLength: 10, 
@@ -86,6 +86,18 @@ class Journal {
                 ],
                 fnDrawCallback: () => {
                     (new Journal()).actionOnJournalsResource();
+                    
+                    $('.journals-table tbody').off('click', 'tr').on('click', 'tr', function (event) {
+                        if ($(event.target).is('button, a, input, select')) return;
+                        let data = dataTable.row(this).data();
+                        if (data) {
+                            onParseActionModal(event, `/journal/preview?id=${data.id}`, 'get', 
+                                [{callback: (new Journal()).journalPreview, params: [event, data.id]}, 
+                                    {callback: (new Auth()).login, params: []}], 
+                                'data-modal', '.preview-journal-modal'
+                            );
+                        }
+                    });
                 }  
             });
         }
@@ -100,8 +112,16 @@ class Journal {
                 btn.addEventListener('click', event => {
                     event.preventDefault();
                     const target_id = event.target.getAttribute('data-id');
-                    if (event.target.classList.contains('edit-user-btn')) {
+                    if (event.target.classList.contains('edit-journal-btn')) {
                         route(`/journal/edit?journal=${target_id}`);
+                    }
+
+                    if (event.target.classList.contains('preview-journal-btn')) {
+                        onParseActionModal(event, `/journal/preview?id=${target_id}`, 'get', 
+                            [{callback: (new Journal()).journalPreview, params: [event, target_id]}, 
+                                {callback: (new Auth()).login, params: []}], 
+                            'data-modal'
+                        );
                     }
                 });
             }

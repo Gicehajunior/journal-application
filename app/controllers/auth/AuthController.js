@@ -66,7 +66,7 @@ class AuthController {
                 throw new Error('Invalid credentials');
             }
             
-            req.session.user = { id: user.id, fullname: user.fullname, username: user.username, email: user.email, contact: user.contact, role: role };
+            req.session.user = { id: user.id, fullname: user.fullname, username: user.username, email: user.email, contact: user.contact, role: user.role };
             const token = jwt.sign(req.session.user, config.APP.JWT_SECRET, { expiresIn: '1h' });
             req.session.token = token;
 

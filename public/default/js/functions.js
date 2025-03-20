@@ -73,8 +73,12 @@ function goBack() {
  * @param {string} content - The HTML content to append.
  * @param {HTMLElement} element - The element to which the content will be appended.
  */
-function __append_html(content, element) {
-    element.innerHTML = content;
+function __append_html(content, element, append=false) {
+    if (append) {
+        element.innerHTML += content; // Append new content
+    } else {
+        element.innerHTML = content; // Replace content
+    }
 }
 
 function __show_modal(modal) {
@@ -301,7 +305,7 @@ function searchSelectInitializer() {
                                     value: `${option[item_id_notation]}`,
                                     text: text_option
                                 }); 
-                                
+
                                 currentSelect.append($option);
 
                             });
@@ -377,7 +381,7 @@ function setupUploadDivSection() {
     function displaySelectedFiles(input) {
         const fileList = input.files;
         const fileNames = Array.from(fileList).map(file => file.name).join(", ");
-        __append_html(`<p><strong>Selected:</strong> ${fileNames}</p>`, fileslist);
+        __append_html(`<p><strong>Selected:</strong> ${fileNames}</p>`, fileslist, true);
     }
 }
 

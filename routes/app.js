@@ -47,5 +47,7 @@ router.route('/journal/create')
 router.route('/journal/edit')
     .get(authMiddleware, JournalController.editJournal)
     .post(authMiddleware, upload.array('attachments', 100), JournalController.editJournal);
+router.get('/journal/preview', authMiddleware, JournalController.journalPreview);
+router.get('/journal/categories', authMiddleware, JournalController.journalCategories);
 
 module.exports = router;

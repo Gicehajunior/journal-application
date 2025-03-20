@@ -1,0 +1,55 @@
+<%- include('crm/partials/header') %>
+
+<div class="dashboard-container">
+    <%- include('crm/partials/sidebar') %>
+
+    <div class="main-content">
+        <%- include('crm/partials/generalTopbar') %>
+        <hr>
+
+        <% if (message && message.length > 0) { %>
+            <div class="form-group m-4">
+                <div class="alert alert-<%= status && status == 'success' ? 'primary' : 'danger' %>" role="alert">
+                    <strong>Alert:</strong> <%= message %>
+                </div>
+            </div>
+        <% } %>
+        
+        <div class="section-2">
+            <div class="row mb-3"> 
+                <div class="d-flex justify-content-end"> 
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editJournalCategoryModal">
+                        Add New Category
+                    </button> 
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-primary table-bordered border border-2 border-dark journal-cateogories-table mt-4" id="journalCateogoriesTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Action</th>
+                            <th scope="col">Category Name</th> 
+                            <th scope="col w-50">Category Description</th> 
+                            <th scope="col">Added On</th> 
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <!-- data gets listed here -->
+                    </tbody>
+                </table>
+            </div>
+                   
+        </div>
+    </div> 
+</div>
+
+<!-- modal -->
+<div class="modal fade edit-journal-category" id="editJournalCategoryModal" tabindex="-1" aria-labelledby="editJournalCategoryModalLabel" aria-hidden="true"></div>
+<!-- /modal -->
+
+<!-- scripts -->
+<script src="/default/js/src/auth.js?v1"></script>
+<script src="/default/js/src/journal.js?v1"></script>
+<!-- /scripts -->
+
+<%- include('crm/partials/footer') %>

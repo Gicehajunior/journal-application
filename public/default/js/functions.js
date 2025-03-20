@@ -176,7 +176,7 @@ function onParseActionModal(event, action, method='GET', callbackFuncs = undefin
         success: function (res, status, xhr) {
             event.target.disabled = false;
             if (res.status && res.status == 'error') {
-                toast(res.status, 500, res.message || 'An error occurred!');
+                toast(res.status, 5000, res.message || 'An error occurred!');
                 return;
             }
 

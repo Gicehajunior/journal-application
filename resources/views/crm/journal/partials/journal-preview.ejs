@@ -1,0 +1,38 @@
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"><%= journal.title %></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container rounded-0">
+                <div class="d-flex justify-content-between text-muted">
+                    <span>Category: <%= journal.category %></span>
+                    <span>Created on: <%= journal.journal_date %></span>
+                </div>
+
+                <hr>
+                
+                <div class="border p-3 rounded bg-light">
+                    <%- journal.description %>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Attachments</h5>
+                    <div class="files-list d-flex flex-wrap gap-2">
+                        <% if (journal.attachments && Object.keys(journal.attachments).length > 0) { %>
+                            <% Object.entries(journal.attachments).forEach(([name, path]) => { %>
+                                <a href="<%= path %>" target="_blank" class="btn btn-outline-primary btn-sm"><%= name %></a>
+                            <% }); %>
+                        <% } else { %>
+                            <em>No attachments available.</em>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>

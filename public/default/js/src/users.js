@@ -51,7 +51,7 @@ class User {
                     if (event.target.classList.contains('edit-user-btn')) {
                         onParseActionModal(event, `/users/edit?id=${target_id}`, 'get', 
                             [{callback: (new User()).editUser, params: [event, target_id]}, 
-                                {callback: (new User()).login, params: []}], 
+                                {callback: (new Auth()).login, params: []}], 
                             'data-modal'
                         );
                     }

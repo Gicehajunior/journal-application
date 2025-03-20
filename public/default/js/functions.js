@@ -168,7 +168,7 @@ function route(path, params = null) {
     }
 }
 
-function onParseActionModal(event, action, method='GET', callbackFuncs = undefined, modalAttributeSelector='target-modal') {
+function onParseActionModal(event, action, method='GET', callbackFuncs = undefined, modalAttributeSelector='target-modal', modalSelector=undefined) {
     $.ajax({
         type: `${method}`,
         url: `${action}`,
@@ -182,8 +182,7 @@ function onParseActionModal(event, action, method='GET', callbackFuncs = undefin
 
             let contentType = xhr.getResponseHeader("Content-Type"); 
             if (contentType && contentType.includes("text/html")) { 
-                let target_modal_selector = event.target.getAttribute(modalAttributeSelector);
-                console.log(target_modal_selector);
+                let target_modal_selector = (modalSelector !== undefined) ? modalSelector : event.target.getAttribute(modalAttributeSelector);
                 if (target_modal_selector) { 
                     const modal_target = document.querySelector(target_modal_selector);
                     __append_html(res, modal_target);

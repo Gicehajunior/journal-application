@@ -17,14 +17,8 @@ class JournalController {
     static async index(req, res) {
         if (req.query.type && req.query.type == 'dt') {
             try {
-                let journals = await Journal.query().findAll({
-                    where: {
-                        user_id: req.session.user.id
-                    }
-                }); 
-                journals = journals.map(journal => {
-                    let row = journal.dataValues; // Extract Sequelize dataValues
-        
+                let journals = await JournalUtil.getAllJournals({user_id: req.session.user.id}) 
+                journals = journals.map(row => {  
                     return {
                         ...row,
                         action: `
@@ -58,6 +52,7 @@ class JournalController {
                                 : row.description;
                         })(),
                         title: utils.ucwords(row.title),
+                        category_name: row.category.category_name ?? 'N/A',
                         created_at: (() => {
                             if (!row.created_at) return '';
                             
@@ -96,9 +91,9 @@ class JournalController {
     static async createJournal(req, res) {
         if (req.method == 'POST') { 
             try {
-                const {title, date, category, description, stayHere} = req.body;
+                const {title, date, category_id, description, stayHere} = req.body;
                 
-                if (!title && !date && !category && !description) {
+                if (!title && !date && !category_id && !description) {
                     throw new Error('All fields are need to be filled!');
                 }
 
@@ -144,7 +139,7 @@ class JournalController {
 
                 return res.status(200).json({status: 'success', message: 'Journal created Successfully!', redirectUrl: redirectUrl});
             } catch (error) { 
-                return res.status(502).json({
+                return res.status(200).json({
                     status: 'error', 
                     message: error.message || 'An error occurred. Please try again!', 
                 });
@@ -153,12 +148,15 @@ class JournalController {
 
         const status = req.session.status ?? null;
         const message = req.session.message ?? null;
+        let journal_categories = await JournalUtil.getJournalCategories(); 
+
         return res.render("crm/journal/create", { 
             title: "Journal Page", 
             status: status, 
             message: message, 
             badge: 'Journal | Create Journals', 
-            user: req.session.user 
+            user: req.session.user,
+            journal_categories: journal_categories
         }); 
     }
 
@@ -171,9 +169,9 @@ class JournalController {
 
         if (req.method == 'POST') {  
             try {
-                const {title, date, category, description, rmPreviousAddedAttachments, stayHere} = req.body;
+                const {title, date, category_id, description, rmPreviousAddedAttachments, stayHere} = req.body;
                 
-                if (!title && !date && !category && !description) {
+                if (!title && !date && !category_id && !description) {
                     throw new Error('All fields are need to be filled!');
                 }
 
@@ -251,7 +249,7 @@ class JournalController {
 
                 return res.status(200).json({status: 'success', message: 'Journal edited Successfully!', redirectUrl: redirectUrl, rmPreviousAddedAttachments: rmPreviousAddedAttachments});
             } catch (error) { 
-                return res.status(502).json({
+                return res.status(200).json({
                     status: 'error', 
                     message: error.message || 'An error occurred. Please try again!', 
                 });
@@ -274,6 +272,7 @@ class JournalController {
 
         journal.attachments = JSON.parse(journal.attachments);   
         journal.journal_date = utils.dateToISO8601Formatter(journal.date);
+        let journal_categories = await JournalUtil.getJournalCategories(); 
 
         return res.render("crm/journal/edit", { 
             title: "Journal Page", 
@@ -281,7 +280,8 @@ class JournalController {
             message: message, 
             badge: 'Journal | Edit Journal', 
             user: req.session.user ,
-            journal: journal
+            journal: journal,
+            journal_categories: journal_categories
         });
     }
 
@@ -301,8 +301,38 @@ class JournalController {
             journal.description = utils.nl2br(journal.description); 
             journal.journal_date = utils.dateToISO8601Formatter(journal.date);
             journal.attachments = JSON.parse(journal.attachments); 
+            let journal_category = null;
+            if (journal.category_id) {
+                journal_category = await JournalUtil.getJournalCategoryById(journal.category_id); 
+                journal.category_name = journal_category.category_name
+            }
             
-            return res.render('crm/journal/partials/journal-preview', {title: "Edit User", journal: journal}); 
+            return res.render('crm/journal/partials/journal-preview', {title: "Edit User", journal: journal, journal_category: journal_category}); 
+        } catch(error) {
+            console.error(error);
+            return res.status(200).json({status: "error", message: error.message || "An error occured!"});
+        }
+    }
+
+    static async createJournalCategories(req, res) {
+        try {  
+            console.log(req.body);
+            const category_name = req.body.category_name; 
+            if (!category_name) {
+                throw new Error(`Category name must be provided. Please check, & try again!`);
+            }
+
+            const exists = await JournalUtil.getJournalCategoryByName(category_name);
+            if (exists) {
+                throw new Error(`Category already exists. Please add a new category!`);
+            }
+
+            const save = await JournalUtil.createCategory(req.body);
+            if (!save) {
+                throw new Error(`Category could not be saved. Please try again!`);
+            }
+
+            return res.status(200).json({status: 'success', message: 'Category created successfully!'});
         } catch(error) {
             console.error(error);
             return res.status(200).json({status: "error", message: error.message || "An error occured!"});
@@ -310,11 +340,106 @@ class JournalController {
     }
 
     static async journalCategories(req, res) {
+        if (req.query.type && req.query.type == 'dt') {
+            try {
+                let journals_categories = await JournalUtil.getJournalCategories(); 
+                journals_categories = journals_categories.map(row => { 
+                    return {
+                        ...row,
+                        action: `
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button class="dropdown-item journal-category-resource edit-journal-category-btn" data-modal=".edit-category-modal" data-id="${row.id}">
+                                            ✏️ Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger journal-category-resource delete-journal-category-btn" data-id="${row.id}">
+                                            🗑️ Delete
+                                        </button>
+                                    </li> 
+                                </ul>
+                            </div>
+                        `, 
+                        category_name: utils.ucwords(row.category_name),
+                        description_formated: utils.nl2br(row.description),
+                        created_at: (() => {
+                            if (!row.created_at) return '';
+                            
+                            let d = new Date(row.created_at);
+                            
+                            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+                        })(),
+                        updated_at: (() => {
+                            if (!row.updated_at) return '';
+                            
+                            let d = new Date(row.updated_at);
+
+                            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+                        })(),
+                    };
+                }); 
+
+                return res.status(200).json({data: journals_categories});
+            } catch (error) {
+                console.error(error);
+                return res.status(200).json({data: []});
+            }
+        }
+
         return res.render("crm/journal/categories", { 
             title: "Journal Page",  
             badge: 'Journal | Manage Journal Categories', 
             user: req.session.user 
         });
+    }
+
+    static async editJournalCategories(req, res) {
+        if (req.method == 'POST') {
+            try {   
+                const category_name = req.body.category_name; 
+                if (!category_name) {
+                    throw new Error(`Category name must be provided. Please check, & try again!`);
+                } 
+    
+                const save = await JournalUtil.editCategory(req.body);
+                if (!save) {
+                    throw new Error(`Category could not be saved. Please try again!`);
+                }
+    
+                return res.status(200).json({status: 'success', message: 'Category created successfully!'});
+            } catch(error) {
+                console.error(error);
+                return res.status(200).json({status: "error", message: error.message || "An error occured!"});
+            }
+        }
+        else {
+            try {  
+                
+                let id = req.query.id;
+    
+                if (!id) {
+                    throw new Error('Your request has been denied. Authentication error occurred!');
+                }
+                
+                let journal_category = await JournalUtil.getJournalCategoryById(id); 
+                if (!journal_category) {
+                    throw new Error('Your request has been denied. Please try again!');
+                }
+
+                journal_category.category_name = utils.ucwords(journal_category.category_name); 
+                journal_category.description = utils.nl2br(journal_category.description);  
+
+                return res.render('crm/journal/partials/edit-category', {title: "Edit Journal Category", journal_category: journal_category}); 
+            } catch(error) {
+                console.error(error);
+                return res.status(200).json({status: "error", message: error.message || "An error occured!"});
+            }
+        }
     }
 }
 

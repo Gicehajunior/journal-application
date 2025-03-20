@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="addCategoryModalLabel">Edit Category</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="journalCategoryForm" action="/journal/category/edit" method="POST" enctype="multipart/form-data" class="needs-validation edit-journal-category-form" novalidate>
+                <div class="mb-3">
+                    <label for="category_name" class="form-label">Category Name</label>
+                    <input type="text" value="<%= journal_category ? journal_category.category_name : '' %>" id="category_name" name="category_name" class="form-control category_name" required> 
+                </div> 
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Category Description</label>
+                    <textarea id="description" name="description" rows="6" class="form-control description"><%- journal_category ? journal_category.description : '' %></textarea> 
+                </div> 
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-sm edit-journal-category-submit-btn" id="editJournalCategorySubmitBtn"><i class="fas fa-pencil-alt"></i> Edit</button>
+        </div>
+    </div>
+</div> 

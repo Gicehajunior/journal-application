@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="journalCategoryForm" action="/journal/category/create" method="POST" enctype="multipart/form-data" class="needs-validation journal-category-form" novalidate>
+                <div class="mb-3">
+                    <label for="category_name" class="form-label">Category Name</label>
+                    <input type="text" id="category_name" name="category_name" class="form-control category-name" required> 
+                </div> 
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Category Description</label>
+                    <textarea id="description" name="description" rows="6" class="form-control description"></textarea> 
+                </div> 
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-sm add-journal-category-btn" id="addJournalCategoryBtn"><i class="fas fa-plus-circle"></i> Add</button>
+        </div>
+    </div>
+</div> 

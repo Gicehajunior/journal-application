@@ -18,13 +18,13 @@
         <div class="section-2">
             <div class="row mb-3"> 
                 <div class="d-flex justify-content-end"> 
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editJournalCategoryModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
                         Add New Category
                     </button> 
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-primary table-bordered border border-2 border-dark journal-cateogories-table mt-4" id="journalCateogoriesTable">
+                <table class="table table-primary table-bordered border border-2 border-dark journal-categories-table mt-4" id="journalCategoriesTable">
                     <thead>
                         <tr>
                             <th scope="col">Action</th>
@@ -44,7 +44,10 @@
 </div>
 
 <!-- modal -->
-<div class="modal fade edit-journal-category" id="editJournalCategoryModal" tabindex="-1" aria-labelledby="editJournalCategoryModalLabel" aria-hidden="true"></div>
+<div class="modal fade add-category-modal" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <%- include('partials/add-category') %>
+</div>
+<div class="modal fade edit-category-modal" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true"></div>
 <!-- /modal -->
 
 <!-- scripts -->

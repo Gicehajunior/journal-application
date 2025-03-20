@@ -25,17 +25,18 @@
                     <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                         <label for="date" class="form-label">Date</label>
                         <input type="date" value="<%= journal ? journal.journal_date : '' %>" id="date" name="date" class="form-control date" required> 
-                    </div>
+                    </div> 
 
-                    <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <label for="category" class="form-label">Category</label>
-                        <select id="category" name="category" class="form-select category">
-                            <option <%= journal && journal.category == 'Personal' ? 'selected' : '' %> value="Personal">Personal</option>
-                            <option <%= journal && journal.category == 'Work' ? 'selected' : '' %> value="Work">Work</option>
-                            <option <%= journal && journal.category == 'Ideas' ? 'selected' : '' %> value="Ideas">Ideas</option>
-                            <option <%= journal && journal.category == 'Other' ? 'selected' : '' %> value="Other">Other</option>
-                        </select>
-                    </div>
+                    <% if (journal_categories && journal_categories.length > 0) { %> 
+                        <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <label for="category_id" class="form-label">Category</label>
+                            <select id="category_id" name="category_id" class="form-select category_id"> 
+                                <% journal_categories.forEach(category => { %>
+                                    <option <%= category.id == journal.category_id ? 'selected' : ''  %> value="<%= category.id %>"><%= category.category_name %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    <% } %> 
                 </div>
 
                 <div class="mb-3">

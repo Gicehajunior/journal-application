@@ -131,6 +131,7 @@ class Journal {
     editJournal() {
         let form = document.querySelector(".journal-form");
         let btn = document.querySelector(".edit-journal-btn");
+        const content = document.querySelector("meta[name='ckeditorLicenseKey']")?.content;
         if (documentContains(btn)) {
             btn = cloneNodeElement(btn);
             btn.addEventListener('click', event => {
@@ -144,6 +145,17 @@ class Journal {
                 }
                 
                 let data = new FormData(form); 
+                if (content && typeof CKEDITOR !== 'undefined' && editorInstance) {  
+                    let editorData = editorInstance.getData(); 
+                    console.log(editorData);  
+
+                    if (data.has('description')) {
+                        data.set('description', editorData);
+                    } else {
+                        data.append('description', editorData);
+                    }
+                }
+                
                 data.append('journal', urlParams()['journal']);
 
                 $.ajax({
@@ -361,6 +373,7 @@ class Journal {
 
 document.addEventListener('DOMContentLoaded', () => {
     const journalInstance = new Journal();
+    setupCkEditor();
     journalInstance.create();
     journalInstance.getJournals();
     journalInstance.editJournal();

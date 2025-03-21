@@ -17,3 +17,17 @@ body {
 * button, * input, * textarea, * select {
     border-radius: 0px !important;
 }
+* table.dataTable {
+    border-collapse: collapse;
+}
+* table tbody, td, tfoot, th, thead, tr {
+    border-width: 100%;
+    border-style: solid;
+    border-color: black;
+}
+* table .table-bordered > :not(caption) > * {
+    border-width: var(--bs-border-width); 
+}
+* .dataTables_filter {
+    margin-bottom: 20px; 
+} 

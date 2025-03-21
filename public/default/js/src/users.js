@@ -138,6 +138,10 @@ class User {
                         if (res && res.message) {
                             toast(res.status, 8000, res.message); 
                         } 
+
+                        if (res && res.redirectUrl && res.redirectUrl.length > 0) {
+                            route(res.redirectUrl);
+                        }
                     },
                     error: error => {
                         btn.disabled = false;
@@ -188,7 +192,7 @@ class User {
                             toast(res.status, 8000, res.message); 
                         } 
 
-                        if (res && res.redirectUrl) {
+                        if (res && res.redirectUrl && res.redirectUrl.length > 0) {
                             route(res.redirectUrl);
                         }
                     },

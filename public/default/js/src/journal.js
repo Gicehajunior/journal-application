@@ -70,6 +70,7 @@ class Journal {
     getJournals() {
         const table = document.querySelector('.journals-table');
         if (documentContains(table)) {
+            const date_filter = parseDateRange($('.journal-date-filter').val());
             const dataTable = $(table).DataTable({
                 destroy: true,
                 processing: true,
@@ -77,7 +78,7 @@ class Journal {
                 borders: true,
                 ajax: {
                     type: 'GET',
-                    url: '/journal/list?type=dt',
+                    url: `/journal/list?type=dt&start_date=${date_filter['startDate']}&end_date=${date_filter['endDate']}`,
                     dataSrc: (res) => { 
                         return res.data || [];
                     },

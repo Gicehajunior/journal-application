@@ -17,7 +17,14 @@ class JournalController {
     static async index(req, res) {
         if (req.query.type && req.query.type == 'dt') {
             try {
-                let journals = await JournalUtil.getAllJournals({user_id: req.session.user.id}) 
+                let {start_date, end_date} = req.query;
+                
+                let journals = await JournalUtil.getAllJournals({
+                    user_id: req.session.user.id, 
+                    start_date: start_date, 
+                    end_date: end_date
+                });
+
                 journals = journals.map(row => {  
                     return {
                         ...row,

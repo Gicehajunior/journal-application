@@ -11,6 +11,7 @@ module.exports = {
         JWT_SECRET: process.env.JWT_SECRET || 'jwtsecretkey',
         SESSION_SECRET: process.env.SESSION_SECRET || 'af63ff81e7d3b9d85ff76b2f59b3b7f350186bd7c0c4e513d852a0634a81c722',
         APP_DEBUG: process.env.APP_DEBUG || true,
+        CKEDITOR_LICENSE_KEY: process.env.CKEDITOR_LICENSE_KEY || 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NzQxMzc1OTksImp0aSI6Ijg4NzM5YzI0LTA4OGYtNDNjZS04MTJlLTFhYWI5ODk5M2JiYSIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIl0sInZjIjoiN2Y5NDU5N2IifQ.EKhJAxOtF08fW4tCbVsohtjMn9Jei9uKt8bMgohbu1nI-0fEyMVWkK8qdoD9WNTgO4-QRVx90YGOIYW1LLBJ9g',
     },
     VIEW_ENGINE: process.env.VIEW_ENGINE || 'ejs',
     PATHS: {
@@ -42,6 +43,11 @@ module.exports = {
     },
     ROUTES: {
         PREFIX: '/api',
+    },
+    REQUESTS: {
+        ALLOW_HEADERS_LIST: {
+            "Content-Security-Policy": "script-src 'self' https://cdn.ckeditor.com;"
+        }
     },
     SESSION: {
         SESSION_NAME: "myexpress.auth_session", // leave empty to default to connect.sid

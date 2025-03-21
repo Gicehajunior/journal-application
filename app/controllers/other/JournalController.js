@@ -46,10 +46,12 @@ class JournalController {
                             </div>
                         `,
                         description_closed: (() => {
-                            const maxLength = 80; // Adjust the max length as needed
-                            return row.description.length > maxLength 
-                                ? row.description.substring(0, maxLength) + "..." 
-                                : row.description;
+                            const maxLength = 80;
+                            const cleanDescription = row.description.replace(/<[^>]*>/g, "");
+                            const truncatedDescription = cleanDescription.length > maxLength 
+                                ? cleanDescription.substring(0, maxLength) + "..." 
+                                : cleanDescription;
+                            return `<p class="w-100">${truncatedDescription}</p>`;
                         })(),
                         title: utils.ucwords(row.title),
                         category_name: row.category.category_name ?? 'N/A',
@@ -156,7 +158,8 @@ class JournalController {
             message: message, 
             badge: 'Journal | Create Journals', 
             user: req.session.user,
-            journal_categories: journal_categories
+            journal_categories: journal_categories,
+            ckeditorLicenseKey: config.APP.CKEDITOR_LICENSE_KEY
         }); 
     }
 
@@ -266,10 +269,10 @@ class JournalController {
                 status: status, 
                 message: message, 
                 badge: 'Journal | Manage Journals', 
-                user: req.session.user 
+                user: req.session.user
             });
         }
-
+        
         journal.attachments = JSON.parse(journal.attachments);   
         journal.journal_date = utils.dateToISO8601Formatter(journal.date);
         let journal_categories = await JournalUtil.getJournalCategories(); 
@@ -281,7 +284,8 @@ class JournalController {
             badge: 'Journal | Edit Journal', 
             user: req.session.user ,
             journal: journal,
-            journal_categories: journal_categories
+            journal_categories: journal_categories,
+            ckeditorLicenseKey: config.APP.CKEDITOR_LICENSE_KEY
         });
     }
 
@@ -297,8 +301,7 @@ class JournalController {
             }
             
             let journal = await JournalUtil.getJournalDetailsById(id);
-            journal.title = utils.ucwords(journal.title); 
-            journal.description = utils.nl2br(journal.description); 
+            journal.title = utils.ucwords(journal.title);  
             journal.journal_date = utils.dateToISO8601Formatter(journal.date);
             journal.attachments = JSON.parse(journal.attachments); 
             let journal_category = null;

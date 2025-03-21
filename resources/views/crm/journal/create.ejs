@@ -16,19 +16,18 @@
 
         <div class="container mt-4"> 
             <form id="journalForm" action="/journal/create" method="POST" enctype="multipart/form-data" class="needs-validation journal-form" novalidate>
-                <div class="mb-3">
-                    <label for="title" class="form-label">Journal Title</label>
-                    <input type="text" id="title" name="title" class="form-control title" required> 
-                </div>
-
                 <div class="row">
                     <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <label for="title" class="form-label">Journal Title</label>
+                        <input type="text" id="title" name="title" class="form-control title" required> 
+                    </div>
+                    <div class="mb-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <label for="date" class="form-label">Date</label>
                         <input type="date" id="date" name="date" class="form-control date" required> 
                     </div>
 
                     <% if (journal_categories && journal_categories.length > 0) { %> 
-                        <div class="mb-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="mb-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                             <label for="category_id" class="form-label">Category</label>
                             <select id="category_id" name="category_id" class="form-select category_id"> 
                                 <option value="">Select Category</option>
@@ -40,9 +39,8 @@
                     <% } %> 
                 </div>
 
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea id="description" name="description" rows="12" class="form-control description" required></textarea> 
+                <div class="mb-3"> 
+                    <textarea id="description" name="description" rows="100" class="form-control description cke_editor" required></textarea>
                 </div>
 
                 <div class="mb-3">

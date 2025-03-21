@@ -119,3 +119,11 @@ footer {
 }
 
 /* /upload area */
+
+/* ck editor */
+.ck-editor__editable {
+    min-height: 600px;
+    max-height: 1100px;
+    overflow-y: auto;
+}
+/* /ck editor */

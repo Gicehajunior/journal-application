@@ -17,6 +17,7 @@ const express = require('express');
 const {upload} = require('@config/storage');
 const authRoutes = require('@routes/auth'); 
 const UsersController = require('@app/controllers/other/UsersController');
+const AccountController = require('@app/controllers/other/AccountController');
 const DashboardController = require('@app/controllers/other/DashboardController');
 const JournalController = require('@app/controllers/other/JournalController');
 const authMiddleware = require('@app/mwares/authMiddleware');
@@ -53,5 +54,9 @@ router.post('/journal/category/create', authMiddleware, upload.none(), JournalCo
 router.route('/journal/category/edit')
     .get(authMiddleware, JournalController.editJournalCategories)
     .post(authMiddleware, upload.none(), JournalController.editJournalCategories);
+    
+// account routes
+router.get('/settings/account/profile', authMiddleware, AccountController.accountProfile);
+router.get('/settings/account/privacy', authMiddleware, AccountController.accountPrivacy);
 
 module.exports = router;

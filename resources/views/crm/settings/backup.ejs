@@ -1,0 +1,53 @@
+<%- include('crm/partials/header') %>
+
+<div class="dashboard-container">
+    <%- include('crm/partials/sidebar') %>
+
+    <div class="main-content">
+        <%- include('crm/partials/generalTopbar') %>
+        <hr>
+
+        <% if (message && message.length > 0) { %>
+            <div class="form-group">
+                <div class="alert alert-<%= status && status == 'success' ? 'primary' : 'danger' %>" role="alert">
+                    <strong>Alert:</strong> <%= message %>
+                </div>
+            </div>
+        <% } %>
+        
+        <div class="section-2">
+            <h3>Account Profile Settings</h3>
+            <form id="profile-settings-form" method="POST" action="/update-profile">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" value="<%= user.fullName %>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Contact Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="<%= user.phone %>">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">New Password (leave blank to keep current)</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div> 
+</div>
+
+<!-- scripts -->
+<script src="/default/js/src/auth.js?v1"></script> 
+<script src="/default/js/src/users.js?v1"></script> 
+
+<%- include('crm/partials/footer') %>

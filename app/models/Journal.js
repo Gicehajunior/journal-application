@@ -2,15 +2,10 @@ const { DataTypes, Model } = require('sequelize');
 const db = require('@config/database');
 
 class Journal extends Model {
-    static tableName = 'journal';
+    static tableName = 'journal'; 
 
-    constructor() {
-        super()
-    }
-
-    static query() {
-        const sequelize = db.getSequelize();
-        return sequelize.define("Journal", {
+    static query(sequelize) { 
+        Journal.init({
             id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
             user_id: { type: DataTypes.INTEGER, allowNull: false },
             title: { type: DataTypes.STRING, allowNull: false },
@@ -20,7 +15,7 @@ class Journal extends Model {
             status: { type: DataTypes.TEXT, allowNull: false },
             date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
         }, {  
-            sequelize: sequelize,  
+            sequelize,  
             timestamps: true,
             createdAt: 'created_at',
             updatedAt: 'updated_at',
@@ -29,4 +24,5 @@ class Journal extends Model {
     }
 }
 
+Journal.query(db.getSequelize());
 module.exports = Journal;

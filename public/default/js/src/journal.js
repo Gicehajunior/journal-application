@@ -3,9 +3,10 @@ class Journal {
         // 
     }
 
-    create() {
+    createJournal() {
         let form = document.querySelector(".journal-form");
         let btn = document.querySelector(".save-journal-btn");
+        const content = document.querySelector("meta[name='ckeditorLicenseKey']")?.content;
         if (documentContains(btn)) {
             btn = cloneNodeElement(btn);
             btn.addEventListener('click', event => {
@@ -19,6 +20,15 @@ class Journal {
                 }
                 
                 const data = new FormData(form); 
+                if (content && typeof CKEDITOR !== 'undefined' && editorInstance) {  
+                    let editorData = editorInstance.getData();  
+
+                    if (data.has('description')) {
+                        data.set('description', editorData);
+                    } else {
+                        data.append('description', editorData);
+                    }
+                }
 
                 $.ajax({
                     type: form.getAttribute('method'),
@@ -146,8 +156,7 @@ class Journal {
                 
                 let data = new FormData(form); 
                 if (content && typeof CKEDITOR !== 'undefined' && editorInstance) {  
-                    let editorData = editorInstance.getData(); 
-                    console.log(editorData);  
+                    let editorData = editorInstance.getData();  
 
                     if (data.has('description')) {
                         data.set('description', editorData);
@@ -374,7 +383,7 @@ class Journal {
 document.addEventListener('DOMContentLoaded', () => {
     const journalInstance = new Journal();
     setupCkEditor();
-    journalInstance.create();
+    journalInstance.createJournal();
     journalInstance.getJournals();
     journalInstance.editJournal();
     journalInstance.createJournalCategories();

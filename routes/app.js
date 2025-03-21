@@ -58,5 +58,7 @@ router.route('/journal/category/edit')
 // account routes
 router.get('/settings/account/profile', authMiddleware, AccountController.accountProfile);
 router.get('/settings/account/privacy', authMiddleware, AccountController.accountPrivacy);
+router.post('/settings/profile/update-profile', authMiddleware, upload.none(), AccountController.updateAccountProfile);
+router.post('/settings/privacy/update-privacy', authMiddleware, upload.none(), AccountController.updateAccountPrivacy);
 
 module.exports = router;

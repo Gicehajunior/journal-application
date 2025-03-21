@@ -11,7 +11,7 @@ class JournalUtil extends Util {
     }
 
     async journalExistsById(id) {
-        const journal = await Journal.query().findOne({ where: { id } });
+        const journal = await Journal.findOne({ where: { id } });
         return journal ? true : false;
     }
 
@@ -64,12 +64,12 @@ class JournalUtil extends Util {
     }
 
     async getJournalDetailsById(id) {
-        return await Journal.query().findOne({ where: { id } }); 
+        return await Journal.findOne({ where: { id } }); 
     }
 
     async createJournalFunc(data) {
         const {title, date, category_id, description, user_id, attachments, status, journal_id} = data; 
-        const create = await Journal.query()
+        const create = await Journal
             .create({title: title, date: date, category_id: category_id, description: description, user_id: user_id, attachments: attachments, status: status}); 
 
         return create;
@@ -77,7 +77,7 @@ class JournalUtil extends Util {
 
     async editJournalFunc(data) {
         const {title, date, category_id, description, user_id, attachments, status, journal} = data;  
-        const create = await Journal.query()
+        const create = await Journal
             .update({title: title, date: date, category_id: category_id, description: description, user_id: user_id, attachments: attachments, status: status}, {
                 where: {
                     id: journal

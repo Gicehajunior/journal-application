@@ -24,7 +24,7 @@ class UsersController {
                 return res.status(200).json({data: []});
             }
 
-            let users = await User.query().findAll();
+            let users = await User.findAll();
             users = users.map(user => {
                 let data = user.dataValues; // Extract Sequelize dataValues
     
@@ -96,7 +96,7 @@ class UsersController {
             }
             
             if (!id) {
-                throw new Error('Your request has been denied. Please try again! ' + req.method);
+                throw new Error('Your request has been denied. Please try again!');
             }
 
             const user = await UserUtil.userExistsById(id);

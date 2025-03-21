@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('@config/config');
 const User = require('@models/User');
+const Util = require('@utils/Util');
 
 class AuthController {
     static async register(req, res) {
@@ -27,7 +28,7 @@ class AuthController {
             }
     
             // Check if user already exists
-            const existingUser = await User.query().findOne({ where: { email } });
+            const existingUser = await User.findOne({ where: { email } }); 
             if (existingUser) {
                 throw new Error('Email already registered'); 
             }
@@ -35,7 +36,7 @@ class AuthController {
             // Hash password and create user
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
-            const user = await User.query().create({ fullname: fullname, username: username, email: email, contact: contact, password: hashedPassword });
+            const user = await User.create({ fullname: fullname, username: username, email: email, contact: contact, password: hashedPassword });
             res.status(200).json({ status: 'success', message: 'User registered successfully', redirectUrl: '/login', user });
         } catch (error) {
             console.error('Error:', error);
@@ -44,8 +45,18 @@ class AuthController {
     }
     
     static async login(req, res) {
-        const session = req.session.user;  
-        return res.render("auth/login", { title: "Login Page", session: session });
+        let message = 'You have been locked out. Please login!';
+
+        if (req.query.message || req.query.auth) {
+            try {
+                const decodedMessage = Util.decodeMessage(req.query.message || req.query.auth);
+                message = decodedMessage || message;
+            } catch (error) {
+                console.error("Error decoding message:", error);
+            }
+        }
+
+        return res.render("auth/login", { title: "Login Page", status: 'error', message: message });
     }
 
     static async authlogin(req, res) {
@@ -56,7 +67,7 @@ class AuthController {
                 throw new Error(`Check your Username and Password, & try again!`);
             }
 
-            const user = await User.query().findOne({ where: { email } });
+            const user = await User.findOne({ where: { email } });
             if (!user) {
                 throw new Error('User not found');
             }
@@ -84,7 +95,8 @@ class AuthController {
                 }
     
                 res.clearCookie(config.SESSION.SESSION_NAME ?? 'connect.sid'); 
-                res.redirect('/login?auth=booted-out-required-to-login-once-again');
+                
+                res.redirect(`/login?auth=${Util.encodeMessage('You have logged out successfully.')}`);
             });
         } catch (error) { 
             if (req.session) {

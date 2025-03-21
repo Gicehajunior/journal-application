@@ -11,12 +11,12 @@ class UserUtil extends Util {
     }
 
     async userExistsById(id) {
-        const user = await User.query().findOne({ where: { id } });
+        const user = await User.findOne({ where: { id } });
         return user ? true : false;
     }
 
     async getUserById(id) {
-        return await User.query().findOne({ where: { id } });
+        return await User.findOne({ where: { id } });
     }
 
     async editUserFunc(data) {
@@ -45,13 +45,33 @@ class UserUtil extends Util {
         }
 
         // Update user details  
-        await User.query().update({ fullname, username, email, contact, password, role }, {
+        return await User.update({ fullname, username, email, contact, password, role }, {
             where: {
                 id: id,
             },
-        });
+        }); 
+    }
 
-        return true;
+    async updatePassword(data) {
+        let { id, newPassword } = data;
+
+        if (!id || !newPassword) {
+            throw new Error("Password is required!");
+        }
+
+        let userDetails = await this.getUserById(id);
+        if (!userDetails) {
+            throw new Error("User not found!");
+        }
+
+        // Update user password  
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt); 
+        return await User.update({ password: hashedPassword }, {
+            where: {
+                id: id,
+            },
+        }); 
     }
 }
 

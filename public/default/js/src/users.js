@@ -106,9 +106,113 @@ class User {
             });
         }
     }
+
+    updateAccountProfileSettings() {
+        let form = document.querySelector(".profile-settings-form");
+        let btn = document.querySelector(".update-profile-submit-btn");
+        if (documentContains(btn)) {
+            btn = cloneNodeElement(btn);
+            btn.addEventListener('click', event => {
+                event.preventDefault();
+                btn.disabled = true;
+                __append_html('Please Wait...', btn);
+
+                if (!documentContains(form)) {
+                    toast('error', 5000, 'Oops, an error occurred!');
+                    return;
+                }
+                
+                const data = new FormData(form); 
+
+                $.ajax({
+                    type: form.getAttribute('method'),
+                    url: form.getAttribute('action'),
+                    data: data,
+                    dataType: 'json', 
+                    contentType: false,
+                    processData: false,
+                    success: function (res) { 
+                        btn.disabled = false;
+                        __append_html('Update Profile', btn);
+                        
+                        if (res && res.message) {
+                            toast(res.status, 8000, res.message); 
+                        } 
+                    },
+                    error: error => {
+                        btn.disabled = false;
+                        __append_html('Update Profile', btn);
+                        try {
+                            error = JSON.parse(error.responseText);
+                        } catch (e) {
+                            error = { message: "An error occurred." };
+                        }
+
+                        console.log(`Ajax Error: ${error.message || JSON.stringify(error)}`);
+                        toast('error', 8000, error.message || 'An error occurred. Please try again!');
+                    }
+                });
+            });
+        }
+    }
+
+    updateAccountPrivacySettings() {
+        let form = document.querySelector(".privacy-settings-form");
+        let btn = document.querySelector(".update-privacy-submit-btn");
+        if (documentContains(btn)) {
+            btn = cloneNodeElement(btn);
+            btn.addEventListener('click', event => {
+                event.preventDefault();
+                btn.disabled = true;
+                __append_html('Please Wait...', btn);
+
+                if (!documentContains(form)) {
+                    toast('error', 5000, 'Oops, an error occurred!');
+                    return;
+                }
+                
+                const data = new FormData(form); 
+
+                $.ajax({
+                    type: form.getAttribute('method'),
+                    url: form.getAttribute('action'),
+                    data: data,
+                    dataType: 'json', 
+                    contentType: false,
+                    processData: false,
+                    success: function (res) { 
+                        btn.disabled = false;
+                        __append_html('Update Profile', btn);
+                        
+                        if (res && res.message) {
+                            toast(res.status, 8000, res.message); 
+                        } 
+
+                        if (res && res.redirectUrl) {
+                            route(res.redirectUrl);
+                        }
+                    },
+                    error: error => {
+                        btn.disabled = false;
+                        __append_html('Update Profile', btn);
+                        try {
+                            error = JSON.parse(error.responseText);
+                        } catch (e) {
+                            error = { message: "An error occurred." };
+                        }
+
+                        console.log(`Ajax Error: ${error.message || JSON.stringify(error)}`);
+                        toast('error', 8000, error.message || 'An error occurred. Please try again!');
+                    }
+                });
+            });
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const userInstance = new User();
     userInstance.getUsers(); 
+    userInstance.updateAccountProfileSettings(); 
+    userInstance.updateAccountPrivacySettings(); 
 });

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const config = require('@config/config');
 const User = require('@models/User');
 const db = require('@config/database');
+const validator = require('validator');
 
 class UserUtil extends Util {
     constructor() {
@@ -26,6 +27,17 @@ class UserUtil extends Util {
             throw new Error("ID, Username, Email, and Contact are required!");
         }
         
+        fullname = validator.escape(validator.trim(fullname));
+        username = validator.escape(validator.trim(username));
+        email = validator.escape(validator.trim(email));
+        contact = validator.escape(validator.trim(contact));
+        password = validator.escape(validator.trim(password));
+        confirmPassword = validator.escape(validator.trim(confirmPassword));
+
+        if (!validator.isEmail(email)) {
+            throw new Error(`Email appears to be invalid!`);
+        }
+
         // Fetch user
         let userDetails = await this.getUserById(id);
         if (!userDetails) {
@@ -58,6 +70,8 @@ class UserUtil extends Util {
         if (!id || !newPassword) {
             throw new Error("Password is required!");
         }
+
+        newPassword = validator.escape(validator.trim(newPassword)); 
 
         let userDetails = await this.getUserById(id);
         if (!userDetails) {

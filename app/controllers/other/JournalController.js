@@ -6,6 +6,7 @@ const Util = require('@utils/Util');
 const UserUtil = require('@utils/UserUtil'); 
 const JournalUtil = require('@utils/JournalUtil'); 
 const utils = require('@config/utils'); 
+const validator = require('validator');
 const path = require('path');
 const fs = require('fs');
 
@@ -100,12 +101,17 @@ class JournalController {
     static async createJournal(req, res) {
         if (req.method == 'POST') { 
             try {
-                const {title, date, category_id, description, stayHere} = req.body;
+                let {title, date, category_id, description, stayHere} = req.body;
                 
                 if (!title && !date && !category_id && !description) {
                     throw new Error('All fields are need to be filled!');
                 }
 
+                title = validator.escape(validator.trim(title));
+                date = validator.escape(validator.trim(date));
+                category_id = validator.escape(validator.trim(category_id));
+                description = validator.escape(validator.trim(description)); 
+    
                 req.body.user_id = req.session.user.id ?? null;
 
                 if (!req.body.user_id) {
@@ -210,12 +216,17 @@ class JournalController {
 
         if (req.method == 'POST') {  
             try {
-                const {title, date, category_id, description, rmPreviousAddedAttachments, stayHere} = req.body;
+                let {title, date, category_id, description, rmPreviousAddedAttachments, stayHere} = req.body;
                 
                 if (!title && !date && !category_id && !description) {
                     throw new Error('All fields are need to be filled!');
                 }
 
+                title = validator.escape(validator.trim(title));
+                date = validator.escape(validator.trim(date));
+                category_id = validator.escape(validator.trim(category_id));
+                description = validator.escape(validator.trim(description)); 
+    
                 req.body.user_id = req.session.user.id ?? null;
 
                 if (!req.body.user_id) {

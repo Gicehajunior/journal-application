@@ -6,6 +6,7 @@ const Util = require('@utils/Util');
 const UserUtil = require('@utils/UserUtil'); 
 const JournalUtil = require('@utils/JournalUtil'); 
 const utils = require('@config/utils'); 
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
@@ -40,6 +41,11 @@ class AccountController {
             data['email'] = req.body.email ?? null;
             data['contact'] = req.body.contact ?? null;    
             
+            fullname = validator.escape(validator.trim(fullname));
+            username = validator.escape(validator.trim(username));
+            email = validator.escape(validator.trim(email));
+            contact = validator.escape(validator.trim(contact)); 
+
             if (!req.session.user.id) {
                 throw new Error('Your request has been denied. Please try again!');
             }

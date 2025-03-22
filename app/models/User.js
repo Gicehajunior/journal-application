@@ -9,9 +9,9 @@ class User extends Model {
     
     async updateSession(req) { 
         const token = jwt.sign(req.session.user, config.APP.JWT_SECRET, { expiresIn: '1h' }); 
-        req.session.token = token ? token : null;
+        req.session.token = token || null;
 
-        return req.session.token ? true : false;
+        return !!req.session.token;
     }
 
     static query(sequelize) {  

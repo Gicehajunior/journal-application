@@ -369,6 +369,31 @@ class JournalController {
         }
     }
 
+    static async trashJournal(req, res) {
+        try { 
+            let { id } = req.body;
+
+            if (!id) {
+                throw new Error('Your request has been denied. Authentication error occurred!');
+            }
+
+            let journal = await JournalUtil.getJournalDetailsById(id);
+            if (!journal) {
+                throw new Error('Your request has been denied. Journal not found!');
+            }
+
+            journal = await JournalUtil.deleteJournal(id);
+            if (!journal) {
+                throw new Error('Your request has been denied. Journal not deleted!');
+            }
+
+            return res.status(200).json({status: "success", message: "Journal deleted successfully!"});
+        } catch(error) {
+            console.error(error);
+            return res.status(200).json({status: "error", message: error.message || "An error occured!"});
+        }
+    }
+
     static async createJournalCategories(req, res) {
         try {  
             console.log(req.body);

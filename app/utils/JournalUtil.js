@@ -95,6 +95,16 @@ class JournalUtil extends Util {
         return create;
     }
 
+    async deleteJournal(id) { 
+        const trash = await Journal.destroy({ 
+                where: {
+                    id: id
+                }
+            });
+
+        return !!trash;
+    }
+
     async createCategory(data) { 
         const queryInterface = await db.getSequelize().getQueryInterface();
 

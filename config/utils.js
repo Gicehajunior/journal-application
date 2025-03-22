@@ -8,10 +8,6 @@ const utility = {
     ucfirst: (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     },
-    dateToISOformatter: (date) => {
-        if (!date) return "";
-        return date.toISOString().split('T')[0]; // Converts to 'YYYY-MM-DD'
-    },
     dateToISO8601Formatter: (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();

@@ -17,7 +17,14 @@ class JournalController {
     static async index(req, res) {
         if (req.query.type && req.query.type == 'dt') {
             try {
-                let journals = await JournalUtil.getAllJournals({user_id: req.session.user.id}) 
+                let {start_date, end_date} = req.query;
+
+                let journals = await JournalUtil.getAllJournals({
+                    user_id: req.session.user.id, 
+                    start_date: start_date, 
+                    end_date: end_date
+                });
+
                 journals = journals.map(row => {  
                     return {
                         ...row,
@@ -109,16 +116,8 @@ class JournalController {
                 req.body.attachments = {};
                 if (req.files) {
                     req.files.forEach(file => {
-                        req.body.attachments[file.originalname] = path.join(`/store/uploads/${req.session.user.id}`, file.originalname);
+                        req.body.attachments[file.filename] = path.join(`/store/uploads/${req.session.user.id}`, file.filename);
                     });  
-                }
-
-                console.log(req.body.attachments);
-                req.body.status = 'draft';
-                req.body.attachments = JSON.stringify(req.body.attachments);
-                const save = await JournalUtil.createJournalFunc(req.body);
-                if (!save) {
-                    throw new Error('An error occurred. Please try again!');
                 }
 
                 // move the files to destination
@@ -129,9 +128,48 @@ class JournalController {
                     }
                     
                     req.files.forEach(file => {
-                        const filePath = path.join(uploadPath, file.originalname);
-                        fs.writeFileSync(filePath, file.buffer); 
+                        const filePath = path.join(uploadPath, file.filename);
+                    
+                        try {
+                            if (file.buffer) {
+                                fs.writeFileSync(filePath, file.buffer); // Save from buffer
+                            } else if (file.path) {
+                                fs.copyFileSync(file.path, filePath); // Copy from temporary storage
+                            } else {
+                                console.error(`Skipping file ${file.filename}: No valid data source`);
+                            }
+                        } catch (error) {
+                            console.error(`Error saving file ${file.filename}:`, error);
+                        }
                     }); 
+                }  
+
+                // console.log(req.body.attachments);
+                req.body.status = 'draft';
+                req.body.attachments = JSON.stringify(req.body.attachments);
+                const save = await JournalUtil.createJournalFunc(req.body);
+
+                if (req.body.attachments && !save) {
+                    req.body.attachments = JSON.parse(req.body.attachments); 
+                    req.body.attachments = Object.entries(req.body.attachments);
+                    req.body.attachments.forEach(([filename, filePath]) => {
+                        console.log(filePath);
+                        const fullPath = path.join(config.PATHS.PUBLIC, filePath); // Adjust path as needed
+                        console.log(fullPath);
+                        if (fs.existsSync(fullPath)) {
+                            fs.unlink(fullPath, (err) => {
+                                if (err) {
+                                    console.error(`Error deleting file: ${fullPath}`, err);
+                                } else {
+                                    console.log(`Deleted file: ${fullPath}`);
+                                }
+                            });
+                        }
+                    }); 
+                } 
+                
+                if (!save) {
+                    throw new Error('An error occurred. Please try again!');
                 } 
 
                 let redirectUrl;
@@ -188,6 +226,8 @@ class JournalController {
                     throw new Error('Oops, Journal could not be found. Please try again later!');
                 }
 
+                console.log(req.files);
+
                 // preprocess uploads dict for db saving. 
                 req.body.attachments = {};
 
@@ -199,18 +239,8 @@ class JournalController {
 
                 if (req.files) {
                     req.files.forEach(file => {
-                        req.body.attachments[file.originalname] = path.join(`/store/uploads/${req.session.user.id}`, file.originalname);
+                        req.body.attachments[file.filename] = path.join(`/store/uploads/${req.session.user.id}`, file.filename);
                     });  
-                }
-
-                console.log(req.body.attachments);
-                req.body.status = 'draft'; 
-                req.body.attachments = JSON.stringify(req.body.attachments);
-                
-                req.body.journal = journal_id;
-                const save = await JournalUtil.editJournalFunc(req.body);
-                if (!save) {
-                    throw new Error('An error occurred. Please try again!');
                 }
 
                 // move the files to destination
@@ -221,12 +251,30 @@ class JournalController {
                     }
                     
                     req.files.forEach(file => {
-                        const filePath = path.join(uploadPath, file.originalname);
-                        fs.writeFileSync(filePath, file.buffer); 
+                        const filePath = path.join(uploadPath, file.filename);
+                    
+                        try {
+                            if (file.buffer) {
+                                fs.writeFileSync(filePath, file.buffer); // Save from buffer
+                            } else if (file.path) {
+                                fs.copyFileSync(file.path, filePath); // Copy from temporary storage
+                            } else {
+                                console.error(`Skipping file ${file.filename}: No valid data source`);
+                            }
+                        } catch (error) {
+                            console.error(`Error saving file ${file.filename}:`, error);
+                        }
                     }); 
                 }  
 
-                if (rmPreviousAddedAttachments && journal && journal.attachments) {
+                // console.log(req.body.attachments);
+                req.body.status = 'draft'; 
+                req.body.attachments = JSON.stringify(req.body.attachments);
+                
+                req.body.journal = journal_id;
+                const save = await JournalUtil.editJournalFunc(req.body);
+                
+                if ((rmPreviousAddedAttachments && journal && journal.attachments) || !save) {
                     journal.attachments = JSON.parse(journal.attachments); 
                     journal.attachments = Object.entries(journal.attachments);
                     journal.attachments.forEach(([filename, filePath]) => {
@@ -243,6 +291,10 @@ class JournalController {
                             });
                         }
                     }); 
+                } 
+
+                if (!save) {
+                    throw new Error('An error occurred. Please try again!');
                 }
 
                 let redirectUrl;

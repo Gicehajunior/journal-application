@@ -31,3 +31,6 @@ body {
 * .dataTables_filter {
     margin-bottom: 20px; 
 } 
+* a {
+    text-decoration-line: none;
+}

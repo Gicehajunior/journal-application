@@ -48,6 +48,20 @@ module.exports = {
         ALLOW_HEADERS_LIST: {
             "Content-Security-Policy": "script-src 'self' https://cdn.ckeditor.com;"
         }
+    },     
+    UPLOADS: {
+        AUTOSAVE: false,
+        AUTORENAME: true,
+        MAX_UPLOADS: 100,
+        MAX_FILE_SIZE: 5 * 1024 * 1024,
+        ALLOWED_FILE_TYPES: [
+            "image/png", 
+            "image/jpeg", 
+            "image/jpg", 
+            "application/pdf"
+        ],
+        PRESERVE_PATH: false,
+        UNIQUE_UPLOAD_NAME: ''
     },
     SESSION: {
         SESSION_NAME: "myexpress.auth_session", // leave empty to default to connect.sid

@@ -56,6 +56,13 @@ class AuthController {
             }
         }
 
+        try { 
+            req.session.destroy();
+            res.clearCookie(config.SESSION.SESSION_NAME ?? 'connect.sid'); 
+        } catch (error) {
+            console.error("Error logging out: ", error);
+        }
+
         return res.render("auth/login", { title: "Login Page", status: 'error', message: message });
     }
 

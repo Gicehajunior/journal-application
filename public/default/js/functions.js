@@ -1,3 +1,4 @@
+dateRangeInitializer();
 function toast(status, time, message) {
     try {
         if (message != undefined || message != null) {
@@ -222,7 +223,7 @@ function dateRangeInitializer(selectedDatesParams = undefined) {
         const dateRangeInputFields = document.querySelectorAll('.dateRange') 
         dateRangeInputFields.forEach(dateRangeInputField => {
             $(dateRangeInputField).datepicker({
-                format: jsDateFormat,
+                format: 'yyyy-mm-dd',
                 autoclose: false,
                 todayHighlight: false,
                 multidate: true,
@@ -263,12 +264,19 @@ function dateRangeInitializer(selectedDatesParams = undefined) {
 
 function parseDateRange(dateRangeStr) {
     // Split the date range into start and end dates
-    var dates = dateRangeStr.split(' - ');
+    try {
+        var dates = dateRangeStr.split(' - ');
     
-    return {
-        startDate: dates[0].trim(),
-        endDate: dates[1].trim()
-    };
+        return {
+            startDate: dates[0].trim(),
+            endDate: dates[1].trim()
+        };
+    } catch (error) {
+        return {
+            startDate: '',
+            endDate: ''
+        };
+    }
 }
 
 function searchSelectInitializer() {  

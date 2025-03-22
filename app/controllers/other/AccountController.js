@@ -65,13 +65,16 @@ class AccountController {
             };
 
             const updateSession = await User.build().updateSession(req);
+            let redirectUrl = '';
+            let status = 'success';
+            let message = "Profile updated successfully!";
             if (!updateSession) {
-                req.flash('status', 'warning');
-                req.flash('message', 'Your session appears to have changed. For security purposes, you have therefore been logged out of the system!');
-                res.redirect('/login');
+                status = 'warning';
+                message = 'Your session appears to have changed. For security purposes, you have therefore been logged out of the system!';
+                redirectUrl = `/login?auth=${Util.encodeMessage(message)}`;
             }
 
-            return res.status(200).json({status: 'success', message: "User edited successfully!", action});
+            return res.status(200).json({status: status, message: message, redirectUrl: redirectUrl, action});
             
         } catch(error) {
             console.error(error);
@@ -120,9 +123,8 @@ class AccountController {
                 throw new Error('Your request has been denied. User detail not edited. Please try again!');
             }
             
-            let message = "Your password appears to have changed. You have been locked out. Please log in again!";
-            message = Util.encodeMessage(message);
-            return res.status(200).json({status: 'success', message: message, redirectUrl: `/login?auth=${message}`, action});
+            let message = "You have been locked out. Your password appears to have changed, please log in again!"; 
+            return res.status(200).json({status: 'success', message: message, redirectUrl: `/login?auth=${Util.encodeMessage(message)}`, action});
             
         } catch(error) {
             console.error(error);

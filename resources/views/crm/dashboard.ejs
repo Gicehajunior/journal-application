@@ -16,200 +16,72 @@
 
         <div class="section-2">
             <div class="stats">
-                <div class="stat-box">
-                    <h3>👥 Users</h3>
-                    <p>120</p>
-                </div>
-                <div class="stat-box">
-                    <h3>🖼️ Gallery Photos</h3>
-                    <p>120</p>
-                </div>
-                <div class="stat-box">
-                    <h3>📇 Contacts</h3>
-                    <p>350</p>
-                </div>
-                <div class="stat-box">
-                    <h3>💬 Messages</h3>
-                    <p>45</p>
-                </div>
-                <div class="stat-box">
-                    <h3>📚 Entries</h3>
-                    <p>120</p>
-                </div>
-                <div class="stat-box">
-                    <h3>📅 Scheduled</h3>
-                    <p>350</p>
-                </div>
-                <div class="stat-box">
-                    <h3>💾 Backups</h3>
-                    <p>45</p>
-                </div> 
-                <div class="stat-box">
-                    <h3>🎯 Goals & Milestones</h3>
-                    <p>350</p>
-                </div> 
+                <a class="stat-box" href="/users">
+                    <div>
+                        <h3>👥 Users</h3>
+                        <p><%= usersCount ? usersCount : 0 %></p>
+                    </div>
+                </a>
+                <a class="stat-box" href="/journal/list">
+                    <div>
+                        <h3>📚 Journal Entries</h3>
+                        <p><%= journalEntriesCount ? journalEntriesCount : 0 %></p>
+                    </div>
+                </a>
+                <a class="stat-box" href="#">
+                    <div>
+                        <h3>🖼️ Gallery Photos</h3>
+                        <p><%= galleryPhotosCount ? galleryPhotosCount : 0 %></p>
+                    </div>
+                </a>
+                <a class="stat-box" href="#">
+                    <div>
+                        <h3>📇 Contacts</h3>
+                        <p><%= contactssCount ? contactssCount : 0 %></p>
+                    </div>
+                </a>
+                <a class="stat-box" href="#">
+                    <div>
+                        <h3>💬 Messages</h3>
+                        <p><%= messagessCount ? messagessCount : 0 %></p>
+                    </div> 
+                </a>
+                <a class="stat-box" href="#">
+                    <div>
+                        <h3>💾 Backups</h3>
+                        <p><%= backupsCount ? backupsCount : 0 %></p>
+                    </div> 
+                </a> 
             </div>        
 
             <div class="journal-entries mt-5">
-                <h3 class="font-weight-bold">Journal Entries List</h3>
+                <div class="d-flex mb-3"> 
+                    <div class="header col-md-8">
+                        <h3 class="font-weight-bold">Journal Entries List</h3>
+                    </div>
+                    <div class="ms-auto">
+                        <a type="button" class="btn btn-primary btn-sm float right" href="/journal/create">
+                            Add journal
+                        </a>
+                    </div>
+                </div>
                 <hr>
                 <div class="table-responsive mt-4">
-                    <table class="table table-primary">
-                        <thead>
-                            <tr>
-                                <th scope="col">Column 1</th>
-                                <th scope="col">Column 2</th>
-                                <th scope="col">Column 3</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="">
-                                <td scope="row">R1C1</td>
-                                <td>R1C2</td>
-                                <td>R1C3</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <%- include('crm/partials/others/journals-table') %>
                 </div> 
-            </div>
-
-            <div class="goals-list mt-5">
-                <h3 class="font-weight-bold">Goals List Set</h3>
-                <hr>
-                <div class="table-responsive mt-4">
-                    <table class="table table-primary">
-                        <thead>
-                            <tr>
-                                <th scope="col">Column 1</th>
-                                <th scope="col">Column 2</th>
-                                <th scope="col">Column 3</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="">
-                                <td scope="row">R1C1</td>
-                                <td>R1C2</td>
-                                <td>R1C3</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> 
-            </div>
-
-            <div class="trackings mt-5">
-                <h3 class="font-weight-bold">Mood Tracking Stats</h3>
-                <hr>
-                <div class="table-responsive mt-4">
-                    <table class="table table-primary">
-                        <thead>
-                            <tr>
-                                <th scope="col">Column 1</th>
-                                <th scope="col">Column 2</th>
-                                <th scope="col">Column 3</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="">
-                                <td scope="row">R1C1</td>
-                                <td>R1C2</td>
-                                <td>R1C3</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                            <tr class="">
-                                <td scope="row">Item</td>
-                                <td>Item</td>
-                                <td>Item</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> 
-            </div>
+            </div> 
         </div>
     </div> 
 </div>
+
+<!-- modal -->
+<div class="modal fade preview-journal-modal" id="previewJournalModal" tabindex="-1" aria-labelledby="previewJournalModalLabel" aria-hidden="true"></div>
+<!-- /modal -->
+
+<!-- scripts -->
+<script src="/default/js/src/auth.js?v1"></script>
+<script src="/default/js/src/journal.js?v1"></script>
+<script src="/default/js/src/dboard.js?v1"></script>
+<!-- /scripts -->
 
 <%- include('partials/footer') %>

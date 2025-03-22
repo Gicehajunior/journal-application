@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const config = require('@config/config'); 
 const Journal = require('@models/Journal');
 const db = require('@config/database');
+const { Op } = require('sequelize');
 
 class JournalUtil extends Util {
     constructor() {
@@ -19,7 +20,14 @@ class JournalUtil extends Util {
         const queryInterface = db.getSequelize().getQueryInterface();
 
         let journals = await queryInterface.select(null, 'journal', {
-            where: { user_id: filter['user_id'] }
+            where: { 
+                user_id: filter['user_id'],
+                ...(filter['start_date'] && filter['end_date'] ? {
+                    created_at: {
+                        [Op.between]: [filter['start_date'], filter['end_date']]
+                    }
+                } : {})
+            }
         });
         
         for (let journal of journals) {

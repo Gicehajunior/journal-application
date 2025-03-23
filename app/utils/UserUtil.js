@@ -16,8 +16,19 @@ class UserUtil extends Util {
         return user ? true : false;
     }
 
+    async userExistsByEmail(email) {
+        const user = await User.findOne({ where: { email: email } });
+        return !!user;
+    }
+
     async getUserById(id) {
-        return await User.findOne({ where: { id } });
+        return await User.findOne({ where: { id: id } });
+    }
+
+    async getUserByEmail(email, mutate=false) {
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) return null;  
+        return mutate ? user.get({ plain: true }) : user;
     }
 
     async editUserFunc(data) {
@@ -86,7 +97,7 @@ class UserUtil extends Util {
                 id: id,
             },
         }); 
-    }
+    } 
 }
 
 module.exports = new UserUtil();

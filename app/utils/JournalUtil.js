@@ -3,8 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('@config/config'); 
 const Journal = require('@models/Journal');
+const JournalCategory = require('@models/JournalCategory');
 const db = require('@config/database');
-const { Op } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 
 class JournalUtil extends Util {
     constructor() {
@@ -17,8 +18,7 @@ class JournalUtil extends Util {
     }
 
     async getAllJournals(filter) {
-        const queryInterface = db.getSequelize().getQueryInterface();
-
+        const queryInterface = db.getSequelize().getQueryInterface(); 
         let journals = await queryInterface.select(null, 'journal', {
             where: { 
                 user_id: filter['user_id'],
@@ -43,8 +43,27 @@ class JournalUtil extends Util {
         return journals;
     }
 
+    async getJournalsByCategories(filters) { 
+        const journalsByCategory = await Journal.findAll({
+            attributes: [
+                'category_id',
+                [Sequelize.fn('COUNT', Sequelize.col('Journal.id')), 'count'],
+                [Sequelize.col('category.category_name'), 'category_name']
+            ],
+            where: {
+                user_id: filters['userId'],
+                created_at: { [Sequelize.Op.between]: [filters['start_date'], filters['end_date']] }
+            },
+            include: [{ model: JournalCategory, as: 'category', attributes: ['category_name'] }],
+            group: ['category_id', 'category.id'],
+            raw: true
+        });
+        
+        return journalsByCategory
+    }
+
     async getJournalCategoryByName(categoryName) {
-        const queryInterface = await db.getSequelize().getQueryInterface();
+        const queryInterface = db.getSequelize().getQueryInterface();
         const query = await queryInterface.select(null, 'journal_categories');
         const category = query.find(row => row.category_name === categoryName);
 
@@ -56,14 +75,14 @@ class JournalUtil extends Util {
     }
 
     async getJournalCategoryById(id) { 
-        const queryInterface = await db.getSequelize().getQueryInterface();
+        const queryInterface = db.getSequelize().getQueryInterface();
         const query = await queryInterface.select(null, 'journal_categories', { where: { id } });
         return query.length ? query[0] : null;
     }
 
     async getJournalCategories() {
         try {
-            const queryInterface = await db.getSequelize().getQueryInterface();
+            const queryInterface = db.getSequelize().getQueryInterface();
             const categories = await queryInterface.select(null, 'journal_categories');
             return categories;
         } catch (error) {
@@ -81,8 +100,7 @@ class JournalUtil extends Util {
             .create({title: title, date: date, category_id: category_id, description: description, user_id: user_id, attachments: attachments, status: status}); 
 
         return create;
-    }
-
+    } 
     async editJournalFunc(data) {
         const {title, date, category_id, description, user_id, attachments, status, journal} = data;  
         const create = await Journal
@@ -106,7 +124,7 @@ class JournalUtil extends Util {
     }
 
     async createCategory(data) { 
-        const queryInterface = await db.getSequelize().getQueryInterface();
+        const queryInterface = db.getSequelize().getQueryInterface();
 
         const create = await queryInterface.bulkInsert('journal_categories', [
             {category_name: data['category_name'], description: data['description']}
@@ -116,7 +134,7 @@ class JournalUtil extends Util {
     }
 
     async editCategory(data) { 
-        const queryInterface = await db.getSequelize().getQueryInterface();
+        const queryInterface = db.getSequelize().getQueryInterface();
 
         const updated = await queryInterface.bulkUpdate(
             'journal_categories', 

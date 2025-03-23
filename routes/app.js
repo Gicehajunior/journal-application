@@ -13,7 +13,6 @@
  * GitHub: https://github.com/Gicehajunior
  */
 const express = require('express');
-
 const {upload} = require('@config/storage');
 const authRoutes = require('@routes/auth'); 
 const UsersController = require('@app/controllers/other/UsersController');
@@ -30,6 +29,7 @@ authRoutes(router);
 // Add New Routes here...
 // dashboard routes
 router.get('/dashboard', authMiddleware, DashboardController.index);
+router.get('/dashboard/journal/piechart-stat', authMiddleware, DashboardController.pieChartStat);
 
 // users routes
 router.get('/users', authMiddleware, UsersController.index); 
@@ -49,7 +49,7 @@ router.route('/journal/edit')
     .get(authMiddleware, JournalController.editJournal)
     .post(authMiddleware, upload.array('attachments', 100), JournalController.editJournal);
 router.get('/journal/preview', authMiddleware, JournalController.journalPreview);
-router.post('/journal/trash', authMiddleware, JournalController.trashJournal);
+router.delete('/journal/trash', authMiddleware, JournalController.trashJournal);
 router.get('/journal/categories', authMiddleware, JournalController.journalCategories);
 router.post('/journal/category/create', authMiddleware, upload.none(), JournalController.createJournalCategories);
 router.route('/journal/category/edit')

@@ -6,6 +6,7 @@ const Util = require('@utils/Util');
 const UserUtil = require('@utils/UserUtil'); 
 const JournalUtil = require('@utils/JournalUtil'); 
 const utils = require('@config/utils'); 
+const validator = require('validator');
 const path = require('path');
 const fs = require('fs');
 
@@ -100,12 +101,17 @@ class JournalController {
     static async createJournal(req, res) {
         if (req.method == 'POST') { 
             try {
-                const {title, date, category_id, description, stayHere} = req.body;
+                let {title, date, category_id, description, stayHere} = req.body;
                 
                 if (!title && !date && !category_id && !description) {
                     throw new Error('All fields are need to be filled!');
                 }
 
+                title = validator.escape(validator.trim(title));
+                date = validator.escape(validator.trim(date));
+                category_id = validator.escape(validator.trim(category_id));
+                description = validator.escape(validator.trim(description)); 
+    
                 req.body.user_id = req.session.user.id ?? null;
 
                 if (!req.body.user_id) {
@@ -210,12 +216,17 @@ class JournalController {
 
         if (req.method == 'POST') {  
             try {
-                const {title, date, category_id, description, rmPreviousAddedAttachments, stayHere} = req.body;
+                let {title, date, category_id, description, rmPreviousAddedAttachments, stayHere} = req.body;
                 
                 if (!title && !date && !category_id && !description) {
                     throw new Error('All fields are need to be filled!');
                 }
 
+                title = validator.escape(validator.trim(title));
+                date = validator.escape(validator.trim(date));
+                category_id = validator.escape(validator.trim(category_id));
+                description = validator.escape(validator.trim(description)); 
+    
                 req.body.user_id = req.session.user.id ?? null;
 
                 if (!req.body.user_id) {
@@ -363,6 +374,31 @@ class JournalController {
             }
             
             return res.render('crm/journal/partials/journal-preview', {title: "Edit User", journal: journal, journal_category: journal_category}); 
+        } catch(error) {
+            console.error(error);
+            return res.status(200).json({status: "error", message: error.message || "An error occured!"});
+        }
+    }
+
+    static async trashJournal(req, res) {
+        try { 
+            let { id } = req.body;
+
+            if (!id) {
+                throw new Error('Your request has been denied. Authentication error occurred!');
+            }
+
+            let journal = await JournalUtil.getJournalDetailsById(id);
+            if (!journal) {
+                throw new Error('Your request has been denied. Journal not found!');
+            }
+
+            journal = await JournalUtil.deleteJournal(id);
+            if (!journal) {
+                throw new Error('Your request has been denied. Journal not deleted!');
+            }
+
+            return res.status(200).json({status: "success", message: "Journal deleted successfully!"});
         } catch(error) {
             console.error(error);
             return res.status(200).json({status: "error", message: error.message || "An error occured!"});

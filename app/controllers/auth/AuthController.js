@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const config = require('@config/config');
 const User = require('@models/User');
 const Util = require('@utils/Util');
+const validator = require('validator');
 
 class AuthController {
     static async register(req, res) {
@@ -22,6 +23,17 @@ class AuthController {
             if (!fullname || !username || !email || !contact || !password || !confirmPassword) {
                 throw new Error(`All fields are required!`);
             }
+            
+            fullname = validator.escape(validator.trim(fullname));
+            username = validator.escape(validator.trim(username));
+            email = validator.escape(validator.trim(email));
+            contact = validator.escape(validator.trim(contact));
+            password = validator.escape(validator.trim(password));
+            confirmPassword = validator.escape(validator.trim(confirmPassword));
+
+            if (!validator.isEmail(email)) {
+                throw new Error(`Email appears to be invalid!`);
+            }
 
             if (password !== confirmPassword) {
                 throw new Error(`Password mismatch error!`);
@@ -32,7 +44,7 @@ class AuthController {
             if (existingUser) {
                 throw new Error('Email already registered'); 
             }
-            
+
             // Hash password and create user
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
@@ -72,6 +84,10 @@ class AuthController {
 
             if (!email || !password) {
                 throw new Error(`Check your Username and Password, & try again!`);
+            }
+
+            if (!validator.isEmail(email)) {
+                throw new Error(`Email appears to be invalid!`);
             }
 
             const user = await User.findOne({ where: { email } });

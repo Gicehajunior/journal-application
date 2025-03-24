@@ -134,6 +134,10 @@ class Journal {
                             'data-modal'
                         );
                     }
+
+                    if (event.target.classList.contains('delete-journal-btn')) {
+                        this.deleteJournal(target_id, event);
+                    }
                 });
             }
         });
@@ -208,6 +212,38 @@ class Journal {
                 });
             });
         }
+    }
+
+    deleteJournal(target_id, event) { 
+        event.target.disabled = true; 
+        $.ajax({
+            type: 'DELETE',
+            url: `/journal/trash`,
+            data: {
+                id: target_id
+            },
+            dataType: 'json',  
+            success: function (res) { 
+                event.target.disabled = false;  
+                if (res && res.message) {
+                    res.status ? toast(res.status, 8000, res.message) : null; 
+                    if (res.status && res.status== 'success') {
+                        (new Journal()).getJournals();
+                    }
+                } 
+            },
+            error: error => {
+                event.target.disabled = false; 
+                try {
+                    error = JSON.parse(error.responseText);
+                } catch (e) {
+                    error = { message: "An error occurred." };
+                }
+
+                console.log(`Ajax Error: ${error.message || JSON.stringify(error)}`);
+                toast('error', 8000, error.message || 'An error occurred. Please try again!');
+            }
+        }); 
     }
 
     createJournalCategories() { 

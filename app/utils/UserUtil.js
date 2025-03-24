@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const config = require('@config/config');
 const User = require('@models/User');
 const db = require('@config/database');
+const validator = require('validator');
 
 class UserUtil extends Util {
     constructor() {
@@ -15,8 +16,19 @@ class UserUtil extends Util {
         return user ? true : false;
     }
 
+    async userExistsByEmail(email) {
+        const user = await User.findOne({ where: { email: email } });
+        return !!user;
+    }
+
     async getUserById(id) {
-        return await User.findOne({ where: { id } });
+        return await User.findOne({ where: { id: id } });
+    }
+
+    async getUserByEmail(email, mutate=false) {
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) return null;  
+        return mutate ? user.get({ plain: true }) : user;
     }
 
     async editUserFunc(data) {
@@ -26,6 +38,17 @@ class UserUtil extends Util {
             throw new Error("ID, Username, Email, and Contact are required!");
         }
         
+        fullname = validator.escape(validator.trim(fullname));
+        username = validator.escape(validator.trim(username));
+        email = validator.escape(validator.trim(email));
+        contact = validator.escape(validator.trim(contact));
+        password = validator.escape(validator.trim(password));
+        confirmPassword = validator.escape(validator.trim(confirmPassword));
+
+        if (!validator.isEmail(email)) {
+            throw new Error(`Email appears to be invalid!`);
+        }
+
         // Fetch user
         let userDetails = await this.getUserById(id);
         if (!userDetails) {
@@ -59,6 +82,8 @@ class UserUtil extends Util {
             throw new Error("Password is required!");
         }
 
+        newPassword = validator.escape(validator.trim(newPassword)); 
+
         let userDetails = await this.getUserById(id);
         if (!userDetails) {
             throw new Error("User not found!");
@@ -72,7 +97,7 @@ class UserUtil extends Util {
                 id: id,
             },
         }); 
-    }
+    } 
 }
 
 module.exports = new UserUtil();

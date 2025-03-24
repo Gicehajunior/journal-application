@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --detectOpenHandles",
     "dev": "nodemon --trace-deprecation server.js",
     "start": "node --trace-deprecation server.js",
     "build": "webpack --config webpack.config.js",
@@ -65,6 +65,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.13.0",
+    "node-mocks-http": "^1.16.2",
     "popper.js": "^1.16.1",
     "print-js": "^1.6.0",
     "pug": "^3.0.3",
@@ -72,6 +73,7 @@
     "sequelize": "^6.37.6",
     "sweetalert2": "^11.17.2",
     "toastr": "^2.1.4",
+    "validator": "^13.12.0",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "devDependencies": {
@@ -82,7 +84,8 @@
     "copy-webpack-plugin": "^13.0.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
-    "supertest": "^7.0.0",
+    "sinon": "^19.0.4",
+    "supertest": "^7.1.0",
     "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1"
   }

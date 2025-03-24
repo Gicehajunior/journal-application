@@ -15,6 +15,7 @@
 const express = require('express');
 const {upload} = require('@config/storage');
 const authRoutes = require('@routes/auth'); 
+const apiRoutes = require('@routes/api'); 
 const UsersController = require('@app/controllers/other/UsersController');
 const AccountController = require('@app/controllers/other/AccountController');
 const DashboardController = require('@app/controllers/other/DashboardController');
@@ -25,6 +26,7 @@ const router = express.Router();
 
 // Auth Routes
 authRoutes(router);
+apiRoutes(router);
 
 // Add New Routes here...
 // dashboard routes

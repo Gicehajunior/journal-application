@@ -42,20 +42,24 @@ class Dashboard {
         });
     }
 
+    generateRandomColor = () => {
+        return `#${Math.floor(Math.random()*16777215).toString(16)}`;
+    };
+
     mapPieChartVisual(data) { 
         let canvasElementContainer = document.querySelector('.visual-rep-1'); 
         if (documentContains(canvasElementContainer) && data && data?.length) {
             let canvasElement = createCanvas(canvasElementContainer, {id: 'categoryChart'});  
             const labels = data.map(d => d.category_name);
             const counts = data.map(d => d.count);    
-            
+            const colors = labels.map(() => (new Dashboard()).generateRandomColor());
             new Chart(canvasElement, {
                 type: 'pie',
                 data: {
                     labels: labels,
                     datasets: [{
                         data: counts,
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                        backgroundColor: colors
                     }]
                 }
             });
@@ -67,7 +71,8 @@ class Dashboard {
         if (documentContains(canvasElementContainer) && data && data?.length) { 
             let canvasElement = createCanvas(canvasElementContainer, {id: 'entryChart'}); 
             const labels = data.map(d => d.category_name);
-            const counts = data.map(d => d.count);   
+            const counts = data.map(d => d.count);  
+            const colors = labels.map(() => (new Dashboard()).generateRandomColor()); 
             new Chart(canvasElement, {
                 type: 'bar',
                 data: {
@@ -75,7 +80,7 @@ class Dashboard {
                     datasets: [{
                         label: 'Number of Entries',
                         data: counts,
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50'],
+                        backgroundColor: colors,
                         borderColor: '#333',
                         borderWidth: 1
                     }]

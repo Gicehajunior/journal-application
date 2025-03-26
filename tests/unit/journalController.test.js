@@ -3,6 +3,7 @@ const Journal = require('@app/models/Journal');
 const JournalUtil = require('@utils/JournalUtil'); 
 const UserUtil = require('@utils/UserUtil'); 
 const httpMocks = require('node-mocks-http');
+const Exception = require('@config/exception');
 const sinon = require('sinon');
 
 jest.setTimeout(10000);
@@ -174,7 +175,12 @@ describe("JournalController - Unit Tests", () => {
     
     it("Should return 500 if journal creation fails", async () => {
         sinon.stub(UserUtil, "getUserByEmail").resolves({ id: 123, email: 'nesthub.daphascomp@gmail.com' });
-        sinon.stub(JournalUtil, "createJournalFunc").resolves(null); // Simulate failure
+        sinon.stub(JournalUtil, "createJournalFunc").rejects(new Exception(
+            500, 
+            'JOURNAL_CREATION_FAILED', 
+            'Failed to create journal. Please try again.',
+            'Internal server error'
+        ));
     
         req.body = { 
             email: "gicehajunior76@gmail.com", 
@@ -184,14 +190,17 @@ describe("JournalController - Unit Tests", () => {
             description: "Test" 
         };
     
+        res.status = jest.fn().mockReturnValue(res);
+        res.json = jest.fn();
         await JournalController.createJournal(req, res);
-    
-        expect(res.statusCode).toBe(500);
-        expect(res._getJSONData()).toMatchObject({
+        
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
             success: false,
             error: {
                 code: "JOURNAL_CREATION_FAILED",
-                message: "Failed to create journal. Please try again."
+                message: "Failed to create journal. Please try again.",
+                reason: "Internal server error"
             }
         });
     });
@@ -206,11 +215,13 @@ describe("JournalController - Unit Tests", () => {
             category_id: "1", 
             description: "Test" 
         };
-    
+
+        res.status = jest.fn().mockReturnValue(res);
+        res.json = jest.fn();
         await JournalController.createJournal(req, res);
     
-        expect(res.statusCode).toBe(500);
-        expect(res._getJSONData()).toEqual({
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
             success: false,
             error: {
                 code: "GATEWAY_ERROR",
@@ -221,21 +232,26 @@ describe("JournalController - Unit Tests", () => {
     });
 
     it("Should return 200 and delete the journal successfully", async () => {
+        sinon.stub(UserUtil, "getUserByEmail").resolves({ id: 123 });
         sinon.stub(JournalUtil, "getJournalDetailsById").resolves({ id: 1, title: "Test Journal" });
         sinon.stub(JournalUtil, "deleteJournal").resolves(true);
 
-        req.body = { id: 1 };
-        await JournalController.trashJournal(req, res);
+        req.query = { id: 1, email: 'gicehajunior76@gmail.com' };  
 
-        expect(res.statusCode).toBe(200);
-        expect(res._getJSONData()).toMatchObject({
+        res.status = jest.fn().mockReturnValue(res);
+        res.json = jest.fn();
+        
+        await JournalController.trashJournal(req, res);
+    
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
             success: true,
             message: "Journal deleted successfully!"
         });
     });
 
     it("Should return 400 if journal ID is missing", async () => {
-        req.body = {};
+        req.query = {};
 
         await JournalController.trashJournal(req, res);
 
@@ -252,7 +268,7 @@ describe("JournalController - Unit Tests", () => {
     it("Should return 404 if journal is not found", async () => {
         sinon.stub(JournalUtil, "getJournalDetailsById").resolves(null);
 
-        req.body = { id: 99 };
+        req.query = { id: 99, email: 'gicehajunior76@gmail.com' };
         await JournalController.trashJournal(req, res);
 
         expect(res.statusCode).toBe(404);
@@ -269,7 +285,7 @@ describe("JournalController - Unit Tests", () => {
         sinon.stub(JournalUtil, "getJournalDetailsById").resolves({ id: 1, title: "Test Journal" });
         sinon.stub(JournalUtil, "deleteJournal").resolves(false);
 
-        req.body = { id: 1 };
+        req.query = { id: 1, email: 'gicehajunior76@gmail.com' };
         await JournalController.trashJournal(req, res);
 
         expect(res.statusCode).toBe(500);
@@ -285,7 +301,7 @@ describe("JournalController - Unit Tests", () => {
     it("Should return 500 for unexpected internal errors", async () => {
         sinon.stub(JournalUtil, "getJournalDetailsById").throws(new Error("Database connection error"));
 
-        req.body = { id: 1 };
+        req.query = { id: 1, email: 'gicehajunior76@gmail.com' };
         await JournalController.trashJournal(req, res);
 
         expect(res.statusCode).toBe(500);

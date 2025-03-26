@@ -9,13 +9,14 @@
 git clone https://github.com/Gicehajunior/journal-application.git
 cd myexpress-framework
 npm install
+npm run build
 ```
 
 ## Running the Framework
 
 ### Development Mode
 ```sh
-npm run build
+npm run dev
 ```
 
 ### Production Mode

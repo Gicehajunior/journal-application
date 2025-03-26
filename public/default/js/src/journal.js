@@ -218,10 +218,7 @@ class Journal {
         event.target.disabled = true; 
         $.ajax({
             type: 'DELETE',
-            url: `/journal/trash`,
-            data: {
-                id: target_id
-            },
+            url: `/journal/trash?id=${target_id}`, 
             dataType: 'json',  
             success: function (res) { 
                 event.target.disabled = false;  

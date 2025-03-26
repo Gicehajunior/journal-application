@@ -62,7 +62,7 @@ class JournalController {
                             return `<p class="w-100">${truncatedDescription}</p>`;
                         })(),
                         title: utils.ucwords(row.title),
-                        category_name: row.category.category_name ?? 'N/A',
+                        category_name: row.category?.category_name ? row.category?.category_name : 'N/A',
                         created_at: (() => {
                             if (!row.created_at) return '';
                             
@@ -382,7 +382,7 @@ class JournalController {
 
     static async trashJournal(req, res) {
         try { 
-            let { id } = req.body;
+            let { id } = req.query;
 
             if (!id) {
                 throw new Error('Your request has been denied. Authentication error occurred!');

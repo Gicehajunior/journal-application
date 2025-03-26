@@ -90,8 +90,18 @@ class JournalUtil extends Util {
         }
     }
 
-    async getJournalDetailsById(id) {
-        return await Journal.findOne({ where: { id } }); 
+    async getJournalDetailsById(id, email=null) {
+        let filter = {
+            where: { 
+                id: id
+            } 
+        };
+
+        if (email?.length) {
+            filter.where.email = email;
+        }
+
+        return await Journal.findOne(filter); 
     }
 
     async createJournalFunc(data) {

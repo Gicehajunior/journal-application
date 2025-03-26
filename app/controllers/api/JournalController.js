@@ -179,13 +179,13 @@ class JournalController {
     
     static async editJournal(req, res) {
         try {
-            let { journal_id, email, title, date, category_id, description, rmPreviousAddedAttachments } = req.body;
+            let { id, email, title, date, category_id, description, rmPreviousAddedAttachments } = req.body;
             
-            if (!journal_id) {
+            if (!id) {
                 throw new Exception(400, "MISSING_JOURNAL_ID", "Journal ID is required.");
             }
     
-            let journal = await JournalUtil.getJournalDetailsById(journal_id);
+            let journal = await JournalUtil.getJournalDetailsById(id);
             if (!journal) {
                 throw new Exception(404, "JOURNAL_NOT_FOUND", "Journal not found.");
             }
@@ -222,7 +222,7 @@ class JournalController {
             }
     
             if (req.files && req.files.length > 0) {
-                const uploadDir = path.join(config.PATHS.PUBLIC, `/store/uploads/${user_id}`);
+                const uploadDir = path.join(config.PATHS.PUBLIC, `/store/uploads/${req.body.user_id}`);
                 if (!fs.existsSync(uploadDir)) {
                     fs.mkdirSync(uploadDir, { recursive: true });
                 }
@@ -235,7 +235,7 @@ class JournalController {
                         } else if (file.path) {
                             fs.copyFileSync(file.path, filePath);
                         }
-                        attachments[file.filename] = `/store/uploads/${user_id}/${file.filename}`;
+                        attachments[file.filename] = `/store/uploads/${req.body.user_id}/${file.filename}`;
                     } catch (err) {
                         console.error(`Error saving file ${file.filename}:`, err);
                     }
@@ -244,8 +244,8 @@ class JournalController {
     
             // Prepare journal update data
             const journalData = {
-                journal_id,
-                user_id,
+                journal: id,
+                user_id: req.body.user_id,
                 title,
                 date,
                 category_id,
@@ -273,8 +273,7 @@ class JournalController {
     
             return res.status(200).json({
                 success: true,
-                message: "Journal updated successfully!",
-                redirectUrl: stayHere ? null : '/journal/list',
+                message: "Journal updated successfully!", 
                 data: save
             });
     
@@ -294,13 +293,21 @@ class JournalController {
 
     static async trashJournal(req, res) {
         try { 
-            const { id } = req.body;
+            const { id, email } = req.query;
     
             if (!id) {
                 throw new Exception(400, "MISSING_JOURNAL_ID", "Journal ID is required.");
             }
+
+            let user = await UserUtil.getUserByEmail(email, true);
     
-            const journal = await JournalUtil.getJournalDetailsById(id);
+            if (!user) {
+                throw new Exception(400, "USER_NOT_FOUND_ERROR", "User not found", "Email invalid or unexists");
+            }
+
+            req.body.user_id = user.id;
+    
+            const journal = await JournalUtil.getJournalDetailsById(id, req.body.user_id); // where user_id is optional
             if (!journal) {
                 throw new Exception(404, "JOURNAL_NOT_FOUND", "Journal not found.");
             }
@@ -329,14 +336,22 @@ class JournalController {
     
     static async createJournalCategories(req, res) {
         try {  
-            const { category_name, role } = req.body;
+            const { email, category_name, description } = req.body;
             
             if (!category_name) {
                 throw new Exception(400, "MISSING_CATEGORY_NAME", "Category name is required.");
             }
+
+            let user = await UserUtil.getUserByEmail(email, true);
+    
+            if (!user) {
+                throw new Exception(400, "USER_NOT_FOUND_ERROR", "User not found", "Email invalid or unexists");
+            }
+
+            req.body.role = user.role;
     
             const allowedRoles = ["superadmin"];
-            if (!allowedRoles.includes(role)) {
+            if (!allowedRoles.includes(req.body.role)) {
                 throw new Exception(403, "UNAUTHORIZED_ACCESS", "Unauthorized access!");
             }
     
@@ -345,14 +360,15 @@ class JournalController {
                 throw new Exception(409, "CATEGORY_ALREADY_EXISTS", "Category already exists. Please choose a different name.");
             }
             
-            const save = await JournalUtil.createCategory({ category_name });
+            const save = await JournalUtil.createCategory({ category_name, description });
             if (!save) {
                 throw new Exception(500, "CATEGORY_CREATE_FAILED", "Failed to create category. Please try again.");
             }
     
-            return res.status(201).json({
+            return res.status(200).json({
                 success: true,
-                message: "Category created successfully!"
+                message: "Category created successfully!",
+                data: save
             });
     
         } catch (error) {
@@ -368,17 +384,7 @@ class JournalController {
     }
     
     static async journalCategories(req, res) { 
-        try {
-            const { role } = req.query;
-            if (!role) {
-                throw new Exception(400, "MISSING_ROLE", "Role is required!");
-            }
-    
-            const allowedRoles = ["superadmin"];
-            if (!allowedRoles.includes(role)) {
-                throw new Exception(403, "UNAUTHORIZED_ACCESS", "Unauthorized access!");
-            }
-    
+        try { 
             let journals_categories = await JournalUtil.getJournalCategories(); 
             journals_categories = journals_categories.map(row => ({ 
                 ...row, 
@@ -407,8 +413,20 @@ class JournalController {
     
     static async editJournalCategories(req, res) { 
         try {   
-            const { category_name, role } = req.body;
+            const { email, id, category_name, description } = req.body;
             
+            if (!id) {
+                throw new Exception(403, "MISSING_CATEGORY_ID", "Access denied. Missing category ID!");
+            }
+
+            let user = await UserUtil.getUserByEmail(email, true);
+    
+            if (!user) {
+                throw new Exception(400, "USER_NOT_FOUND_ERROR", "User not found", "Email invalid or unexists");
+            }
+    
+            const role = user.role;
+
             if (!role) {
                 throw new Exception(403, "MISSING_ROLE", "Access denied. Missing role!");
             }
